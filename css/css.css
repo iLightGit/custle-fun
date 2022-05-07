@@ -1,3 +1,7 @@
+:root {
+    --transform: translate3d(0, 0, 1px);
+}
+
 /*reset*/
 * {
     font-family: Arial, Helvetica, sans-serif;
@@ -103,18 +107,6 @@ html, body {
     display: none;
 }
 
-.fleft {
-    float: left;
-}
-
-.fnone {
-    float: none
-}
-
-.fright {
-    float: right;
-}
-
 /*end helpers */
 
 /*main*/
@@ -141,6 +133,7 @@ table {
 }
 
 
+/*noinspection ALL*/
 .m_content li .block {
     background-color: #fff;
     transform: translate3d(0, 0, 3px);
@@ -159,7 +152,7 @@ table {
 
 .m_content .li {
     background: #eee;
-    transform: translate3d(0, 0, 1px);
+    transform: var(--transform);
     display: block;
     position: relative;
     height: 65px;
@@ -180,25 +173,11 @@ table {
     -webkit-transition: all 0.6s ease;
     -moz-transition: all 0.6s ease;
     -o-transition: all 0.6s ease;
-    -ms-transition: all 0.6s ease;
     transition: all 0.6s ease;
 
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    -o-transform-style: preserve-3d;
-    -ms-transform-style: preserve-3d;
+
     transform-style: preserve-3d;
-
-    -webkit-transform-origin: 50% 50%;
-    -moz-transform-origin: 50% 50%;
-    -o-transform-origin: 50% 50%;
-    -ms-transform-style: preserve-3d;
     transform-origin: 50% 50%;
-
-    -webkit-transform: perspective(900px) rotate3d(1, 1, 0, -45deg);
-    -moz-transform: perspective(900px) rotate3d(1, 1, 0, -45deg);
-    -o-transform: perspective(900px) rotate3d(1, 1, 0, -45deg);
-    -ms-transform-style: preserve-3d;
     transform: perspective(900px) rotate3d(0, -180, 0, 180deg);
 }
 
@@ -211,14 +190,8 @@ table {
 }
 
 .m_content .li.active, .m_content .li.clear {
-
-    -webkit-transform: perspective(900px) rotate3d(-45, 180, 0, 135deg);
-    -moz-transform: perspective(900px) rotate3d(-45, 180, 0, 135deg);
-    -o-transform: perspective(900px) rotate3d(-45, 180, 0, 135deg);
     -ms-transform: perspective(900px) rotate3d(-45, 180, 0, 135deg);
     transform: perspective(900px) rotate3d(0, 0, 0, 180deg);
-
-
 }
 
 .m_content .block {
@@ -255,7 +228,7 @@ table {
     color: #54a5e3;
     font-weight: bold;
     font-size: 28px;
-    text-shadow: 0px 0px 0 rgb(64, 145, 207), -1px 0px 0 rgb(44, 125, 187), -2px 0px 1px rgba(0, 0, 0, 0.1), -2px 0px 1px rgba(0, 0, 0, 0.5), 0px 0px 1px rgba(0, 0, 0, .2);
+    text-shadow: 0 0 0 rgb(64, 145, 207), -1px 0 0 rgb(44, 125, 187), -2px 0 1px rgba(0, 0, 0, 0.1), -2px 0 1px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, .2);
 }
 
 .timer {
@@ -287,7 +260,7 @@ table {
     font-family: 'Bookman Old Style', serif;
     font-size: 91px;
     line-height: 1em;
-    text-shadow: 0px 0px 0 rgb(63, 141, 160), 1px 1px 0 rgb(50, 128, 147), 2px 2px 0 rgb(36, 114, 133), 3px 3px 0 rgb(22, 100, 119), 4px 4px 0 rgb(9, 87, 106), 5px 5px 0 rgb(-5, 73, 92), 6px 6px 0 rgb(-19, 59, 78), 7px 7px 6px rgba(0, 0, 0, 0.65), 7px 7px 1px rgba(0, 0, 0, 0.5), 0px 0px 6px rgba(0, 0, 0, .2);
+    text-shadow: 0 0 0 rgb(63, 141, 160), 1px 1px 0 rgb(50, 128, 147), 2px 2px 0 rgb(36, 114, 133), 3px 3px 0 rgb(22, 100, 119), 4px 4px 0 rgb(9, 87, 106), 5px 5px 0 rgb(-5, 73, 92), 6px 6px 0 rgb(-19, 59, 78), 7px 7px 6px rgba(0, 0, 0, 0.65), 7px 7px 1px rgba(0, 0, 0, 0.5), 0 0 6px rgba(0, 0, 0, .2);
 
 }
 
@@ -297,11 +270,10 @@ table {
 
 .playerScoreBox,
 .bonusScoreBox {
-    height: 100px;
     width: 100%;
     top: 100%;
     left: 0;
-    margin-top: 40px;
+    margin: 40px 0;
     text-align: center;
 }
 
@@ -322,8 +294,10 @@ table {
     color: #000;
     font-size: 20px;
     font-weight: bold;
-    padding: 20px 35px;
     position: relative;
+}
+.playerScoreFill{
+    padding: 20px 35px;
 }
 
 .NewPlayerScore {
