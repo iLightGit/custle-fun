@@ -20,7 +20,27 @@
         </td></tr><!--/content-->
 
     </table>
-    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+    <script type="text/javascript" src="js/bridge.min.js" ></script>
+    <script>
+        console.log(111);
+        vkBridge.send("VKWebAppInit", {});
+        vkBridge
+            .send('VKWebAppCheckAllowedScopes')
+            .then(data => {
+                // Handling received data
+                console.log(data);
+            })
+            .catch(error => {
+                // Handling an error
+                console.log(error);
+            });
+
+        // bridge.send("VKWebAppInit");
+        console.log(333);
+        // var bri = bridge.send("VKWebAppCheckAllowedScopes", {scopes: "friends,notify"});
+
+        console.log(222);
+    </script>
     <script type="text/javascript" src="js/jquery.js" ></script>
     <script type="text/javascript" src="js/js.js"></script>
 </body>
