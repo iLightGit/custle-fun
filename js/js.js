@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.31';
+    const gameVersion = 'v0.1.32';
 
     console.log(gameVersion);
 
@@ -26,34 +26,36 @@ $(document).ready(function () {
 
     console.log('request №1');
 
-    var m_httpVars 			= window.location.search.substring(1).split("&");
-    var m_urlvars				= {};
+    var m_httpVars = window.location.search.substring(1).split("&");
+    var m_urlvars = {};
 
     for (var i in m_httpVars) {
-        var s 		= String(m_httpVars[i]).split("=");
-        var key 	= String(s[0]);
-        var value 	= String(s[1]);
+        var s = String(m_httpVars[i]).split("=");
+        var key = String(s[0]);
+        var value = String(s[1]);
         m_urlvars[key] = value;
     }
 
     console.log('m_httpVars', m_httpVars);
     console.log('m_urlvars', m_urlvars);
-    console.log('typeof  viewer_id:', typeof  m_urlvars.viewer_id, typeof m_urlvars.access_token);
+    console.log('typeof  viewer_id:', typeof m_urlvars.viewer_id, typeof m_urlvars.access_token);
 
     const serv_key = 'e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e';
     // TODO если делать монетизацию - перегенерировать, и положить на сервер
 
-    if(typeof  m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined'){
-
+    if (typeof m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined') {
 
 
         // Для тестов только на странице Сергей Ясвет
-        if(m_urlvars.viewer_id === '85182172'){ // Этот код выполнится только для меня
+        if (m_urlvars.viewer_id === '85182172') { // Этот код выполнится только для меня
 
             console.log(555, m_urlvars.viewer_id, serv_key);
 
             //Получаем токен приложения
-            vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications"})
+            vkBridge.send("VKWebAppGetAuthToken", {
+                "app_id": 8158397,
+                "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications"
+            })
                 .then(data => {
                     console.log(777, data);
 
@@ -62,6 +64,13 @@ $(document).ready(function () {
                             console.log(2222, data);
                         });
 
+
+                    vkBridge.send("VKWebAppCallAPIMethod", {
+                        "method": "secure.addAppEvent",
+                        "request_id": gameVersion,
+                        "params": {"user_id": m_urlvars.viewer_id, "v": "5.5131", "access_token": serv_key, "value": "83", "activity_id":"2"}
+                    });
+
                     $.ajax({
                         /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
                         url: 'https://api.vk.com/method/secure.addAppEvent?' +
@@ -69,12 +78,11 @@ $(document).ready(function () {
                             '&user_id=' + m_urlvars.viewer_id +
                             '&activity_id=1' +
                             '&value=83' +
-                            '&access_token='+ serv_key +
-                            '&client_id=8158397',
+                            '&access_token=' + serv_key,
                         type: 'GET',
                         dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
                         crossDomain: true,
-                        success: function(data){
+                        success: function (data) {
                             console.log(888, data);
                         }
                     })
@@ -97,8 +105,6 @@ $(document).ready(function () {
         // })
 
     }
-
-
 
 
     var m = [], n = [], area = 4, timeToOne = 5,//время на 1 ход
@@ -223,9 +229,6 @@ $(document).ready(function () {
             //     }).catch(error => console.log(error));
 
 
-
-
-
         }
     };
 
@@ -311,7 +314,7 @@ $(document).ready(function () {
         $('.m_content').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Player Score: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
     }());
 
-    $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">'+gameVersion+'</div>')
+    $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
 
     $(window).load(function () {
         start(area);
