@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.17');
+    console.log('v0.1.18');
 
     // console.log('request №1');
     // var request = new XMLHttpRequest();
@@ -39,7 +39,7 @@ $(document).ready(function () {
 
     if(typeof  m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined'){
 
-        if(m_urlvars.viewer_id === 85182172){ // Этот код выполнится только для меня
+        if(m_urlvars.viewer_id === '85182172'){ // Этот код выполнится только для меня
             console.log(555, m_urlvars.viewer_id, serv_key);
             $.ajax({
                 /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
