@@ -1,14 +1,10 @@
-
 $(document).ready(function () {
 
+    // Вынести в он старт
+    vkBridge.send("VKWebAppInit");
 
 
-
-
-
-
-
-    console.log(123);
+    console.log('v0.1.4');
 
     //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
 
@@ -118,11 +114,30 @@ $(document).ready(function () {
             $('.m_content').find('.btnRestart').on('click', function () {
                 document.location.reload();
             });
-            vkBridge.send("VKWebAppInit");
 
-            vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:parseInt($('.playerScoreCounter').text())})
-                .then(data => console.log(data.success))
-                .catch(error => console.log(error));
+            // Вынести в событие
+            // Ипользуется только для мобилок
+            // Выводить только для первого раза или при установлении рекорда
+            // vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:parseInt($('.playerScoreCounter').text())})
+            //     .then(data => console.log(data.success))
+            //     .catch(error => console.log(error));
+            console.log('end game 123');
+
+            // Получаем токен приложения
+            vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
+                .then(data => {
+
+                    console.log(data);
+                    var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&access_token='+data;
+                    request.open('GET', requestURL);
+                    request.responseType = 'json';
+                    request.send();
+                    request.onload = function() {
+                        var vkAPIresponse = request.response;
+                      console.log(777,vkAPIresponse);
+                    }
+
+                }).catch(error => console.log(error));
         }
     };
 
