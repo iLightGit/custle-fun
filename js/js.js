@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.10');
+    console.log('v0.1.11');
 
     // console.log('request №1');
     // var request = new XMLHttpRequest();
@@ -31,9 +31,10 @@ $(document).ready(function () {
     }
 
     console.log('m_httpVars', m_httpVars);
+    console.log('m_urlvars', m_urlvars);
 
     if(typeof  viewer_id !== 'undefined' && typeof access_token !== 'undefined'){
-        console.log(555);
+        console.log(555, viewer_id, access_token);
         $.ajax({
             url: 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids='+viewer_id+'access_token='+access_token,
             type: 'GET',
