@@ -1,10 +1,14 @@
 $(document).ready(function () {
 
+    //TODO иногда зачисляется 0 в Очки
+    //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
+    //TODO можно начать переворачивать во время анимации старта
+
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.27';
+    const gameVersion = 'v0.1.28';
 
     console.log(gameVersion);
 
@@ -61,8 +65,7 @@ $(document).ready(function () {
                             '&user_id=' + m_urlvars.viewer_id +
                             '&activity_id=2' +
                             '&value=83' +
-                            '&access_token='+ serv_key +
-                            '&client_secret=' + data.access_token +
+                            '&access_token='+ data.access_token +
                             '&client_id=8158397',
                         type: 'GET',
                         dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
@@ -92,7 +95,7 @@ $(document).ready(function () {
     }
 
 
-    //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
+
 
     var m = [], n = [], area = 4, timeToOne = 5,//время на 1 ход
         box = $('.m_content ul'), boxLi, selectSize = $('.size'), timer_timeout;
