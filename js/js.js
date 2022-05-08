@@ -107,6 +107,7 @@ $(document).ready(function () {
         checkCompleate();
     };
 
+    // Проверка на завершение игры
     function checkCompleate() {
         if (($('.li.clear').size() == $('.li').size())) {
             boxLi.animate({
@@ -117,6 +118,11 @@ $(document).ready(function () {
             $('.m_content').find('.btnRestart').on('click', function () {
                 document.location.reload();
             });
+            vkBridge.send("VKWebAppInit");
+
+            vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:parseInt($('.playerScoreCounter').text())})
+                .then(data => console.log(data.success))
+                .catch(error => console.log(error));
         }
     };
 
