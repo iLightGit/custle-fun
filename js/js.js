@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.4');
+    console.log('v0.1.5');
 
     //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
 
@@ -126,9 +126,11 @@ $(document).ready(function () {
             // Получаем токен приложения
             vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
                 .then(data => {
-
                     console.log(data);
-                    var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&access_token='+data;
+                }).catch(error => console.log(error));
+
+
+                    var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids=85182172';
                     request.open('GET', requestURL);
                     request.responseType = 'json';
                     request.send();
@@ -137,7 +139,7 @@ $(document).ready(function () {
                       console.log(777,vkAPIresponse);
                     }
 
-                }).catch(error => console.log(error));
+
         }
     };
 
