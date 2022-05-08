@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.8');
+    console.log('v0.1.9');
 
     // console.log('request №1');
     // var request = new XMLHttpRequest();
@@ -19,6 +19,9 @@ $(document).ready(function () {
     // }
 
     console.log('request №2');
+
+    var m_httpVars 			= window.location.search.substring(1).split("&");
+    console.log('m_httpVars', m_httpVars);
 
     if(typeof  viewer_id !== 'undefined' && typeof access_token !== 'undefined'){
         console.log(555);
