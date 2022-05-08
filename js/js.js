@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.5');
+    console.log('v0.1.6');
 
     //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
 
@@ -129,7 +129,7 @@ $(document).ready(function () {
                     console.log(data);
                 }).catch(error => console.log(error));
 
-
+                    var request = new XMLHttpRequest();
                     var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids=85182172';
                     request.open('GET', requestURL);
                     request.responseType = 'json';
