@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.24';
+    const gameVersion = 'v0.1.25';
 
     console.log(gameVersion);
 
@@ -51,6 +51,7 @@ $(document).ready(function () {
                     '&activity_id=2' +
                     '&value=83' +
                     '&access_token='+ serv_key +
+                    '&client_secret=' + m_urlvars.access_token +
                     '&client_id=8158397',
                 type: 'GET',
                 dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
