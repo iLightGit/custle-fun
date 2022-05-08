@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.25';
+    const gameVersion = 'v0.1.26';
 
     console.log(gameVersion);
 
@@ -40,6 +40,12 @@ $(document).ready(function () {
     // TODO если делать монетизацию - перегенерировать, и положить на сервер
 
     if(typeof  m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined'){
+
+        //Получаем токен приложения
+        vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
+            .then(data => {
+                console.log(777, data);
+            }).catch(error => console.log(error));
 
         if(m_urlvars.viewer_id === '85182172'){ // Этот код выполнится только для меня
             console.log(555, m_urlvars.viewer_id, serv_key);
