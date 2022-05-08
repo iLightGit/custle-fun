@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.14');
+    console.log('v0.1.15');
 
     // console.log('request №1');
     // var request = new XMLHttpRequest();
@@ -18,7 +18,7 @@ $(document).ready(function () {
     //     console.log(777,vkAPIresponse);
     // }
 
-    console.log('request №2');
+    console.log('request №1');
 
     var m_httpVars 			= window.location.search.substring(1).split("&");
     var m_urlvars				= {};
@@ -34,10 +34,14 @@ $(document).ready(function () {
     console.log('m_urlvars', m_urlvars);
     console.log('typeof  viewer_id:', typeof  m_urlvars.viewer_id, typeof m_urlvars.access_token);
 
+    const serv_key = 'e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e';
+    // TODO если делать монетизацию - перегенерировать, и положить на сервер
+
     if(typeof  m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined'){
         console.log(555, m_urlvars.viewer_id, m_urlvars.access_token);
         $.ajax({
-            url: 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids='+m_urlvars.viewer_id+'access_token='+m_urlvars.access_token,
+            /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
+            url: 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids='+m_urlvars.viewer_id+'access_token='+serv_key,
             type: 'GET',
             dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
             crossDomain: true,
