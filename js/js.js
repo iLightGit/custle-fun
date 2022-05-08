@@ -1,4 +1,35 @@
 $(document).ready(function () {
+    console.log(12);
+
+
+
+    $.getScript("https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js", function(){
+
+
+        console.log(111);
+
+        bridge
+            .send('VKWebAppGetEmail')
+            .then(data => {
+                // Handling received data
+                console.log(data.email);
+            })
+            .catch(error => {
+                // Handling an error
+                console.log(error);
+            });
+
+        // bridge.send("VKWebAppInit");
+        console.log(333);
+        // var bri = bridge.send("VKWebAppCheckAllowedScopes", {scopes: "friends,notify"});
+
+        console.log(222);
+
+
+    });
+
+
+    console.log(123);
 
     //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
 
