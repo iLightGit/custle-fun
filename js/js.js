@@ -4,30 +4,35 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.7');
+    console.log('v0.1.8');
 
-    console.log('request №1');
-    var request = new XMLHttpRequest();
-    var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids=85182172';
-    request.open('GET', requestURL, true);
-    request.responseType = 'json';
-    request.send();
-    request.onload = function() {
-        var vkAPIresponse = request.response;
-        console.log(777,vkAPIresponse);
-    }
+    // console.log('request №1');
+    // var request = new XMLHttpRequest();
+    // var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids=85182172';
+    // request.open('GET', requestURL, true);
+    // request.responseType = 'jsonp';
+    // request.withCredentials = true;
+    // request.send();
+    // request.onload = function() {
+    //     var vkAPIresponse = request.response;
+    //     console.log(777,vkAPIresponse);
+    // }
 
     console.log('request №2');
 
-    $.ajax({
-        url: 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids=85182172',
-        type: 'GET',
-        dataType: 'jsonp',
-        crossDomain: true,
-        success: function(data){
-            console.log(888, data.response);
-        }
-    })
+    if(typeof  viewer_id !== 'undefined' && typeof access_token !== 'undefined'){
+        console.log(555);
+        $.ajax({
+            url: 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids='+viewer_id+'access_token='+access_token,
+            type: 'GET',
+            dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
+            crossDomain: true,
+            success: function(data){
+                console.log(888, data.response);
+            }
+        })
+    }
+
 
     //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
 
