@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.26';
+    const gameVersion = 'v0.1.27';
 
     console.log(gameVersion);
 
@@ -41,31 +41,40 @@ $(document).ready(function () {
 
     if(typeof  m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined'){
 
-        //Получаем токен приложения
-        vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
-            .then(data => {
-                console.log(777, data);
-            }).catch(error => console.log(error));
+
 
         if(m_urlvars.viewer_id === '85182172'){ // Этот код выполнится только для меня
+
+
+
             console.log(555, m_urlvars.viewer_id, serv_key);
-            $.ajax({
-                /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-                url: 'https://api.vk.com/method/secure.addAppEvent?' +
-                    'v=5.5131' +
-                    '&user_id=' + m_urlvars.viewer_id +
-                    '&activity_id=2' +
-                    '&value=83' +
-                    '&access_token='+ serv_key +
-                    '&client_secret=' + m_urlvars.access_token +
-                    '&client_id=8158397',
-                type: 'GET',
-                dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
-                crossDomain: true,
-                success: function(data){
-                    console.log(888, data);
-                }
-            })
+
+            //Получаем токен приложения
+            vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications"})
+                .then(data => {
+                    console.log(777, data);
+
+                    $.ajax({
+                        /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
+                        url: 'https://api.vk.com/method/secure.addAppEvent?' +
+                            'v=5.5131' +
+                            '&user_id=' + m_urlvars.viewer_id +
+                            '&activity_id=2' +
+                            '&value=83' +
+                            '&access_token='+ serv_key +
+                            '&client_secret=' + data.access_token +
+                            '&client_id=8158397',
+                        type: 'GET',
+                        dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
+                        crossDomain: true,
+                        success: function(data){
+                            console.log(888, data);
+                        }
+                    })
+
+                }).catch(error => console.log(error));
+
+
         }
 
 
