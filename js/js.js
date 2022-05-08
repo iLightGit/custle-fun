@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.32';
+    const gameVersion = 'v0.1.33';
 
     console.log(gameVersion);
 
@@ -59,17 +59,17 @@ $(document).ready(function () {
                 .then(data => {
                     console.log(777, data);
 
-                    vkBridge.send("VKWebAppCheckAllowedScopes", {scopes: "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications"})
-                        .then(data => {
-                            console.log(2222, data);
-                        });
+
 
 
                     vkBridge.send("VKWebAppCallAPIMethod", {
                         "method": "secure.addAppEvent",
                         "request_id": gameVersion,
                         "params": {"user_id": m_urlvars.viewer_id, "v": "5.5131", "access_token": serv_key, "value": "83", "activity_id":"2"}
-                    });
+                    })
+                        .then(data => {
+                            console.log(3333, data);
+                        }).catch(error => console.log(error));;
 
                     $.ajax({
                         /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
