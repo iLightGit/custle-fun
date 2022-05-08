@@ -4,7 +4,9 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    console.log('v0.1.19');
+    const gameVersion = 'v0.1.20';
+
+    console.log(gameVersion);
 
     // console.log('request №1');
     // var request = new XMLHttpRequest();
@@ -43,7 +45,7 @@ $(document).ready(function () {
             console.log(555, m_urlvars.viewer_id, serv_key);
             $.ajax({
                 /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-                url: 'https://api.vk.com/method/secure.addAppEvent?v=5.5131&&user_id=85182172&activity_id=2&value=83&access_token=e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e',
+                url: 'https://api.vk.com/method/secure.addAppEvent?v=5.5131&user_id=85182172&activity_id=2&value=83&access_token=e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e',
                 type: 'GET',
                 dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
                 crossDomain: true,
@@ -280,6 +282,7 @@ $(document).ready(function () {
         $('.m_content').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Player Score: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
     }());
 
+    $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">'+gameVersion+'</div>')
 
     $(window).load(function () {
         start(area);

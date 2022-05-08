@@ -130,6 +130,7 @@ table {
 
 .m_content {
     width: 100%;
+    position: relative;
 }
 
 
