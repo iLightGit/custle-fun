@@ -4,7 +4,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.21';
+    const gameVersion = 'v0.1.22';
 
     console.log(gameVersion);
 
@@ -47,11 +47,11 @@ $(document).ready(function () {
                 /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
                 url: 'https://api.vk.com/method/secure.addAppEvent?' +
                     'v=5.5131' +
-                    '&user_id=85182172' +
+                    '&user_id=' + m_urlvars.viewer_id +
                     '&activity_id=2' +
                     '&value=83' +
                     '&client_id=8158397' +
-                    '&access_token=e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e',
+                    '&access_token='+m_urlvars.access_token,
                 type: 'GET',
                 dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
                 crossDomain: true,
