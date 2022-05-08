@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.29';
+    const gameVersion = 'v0.1.30';
 
     console.log(gameVersion);
 
@@ -47,9 +47,8 @@ $(document).ready(function () {
 
 
 
+        // Для тестов только на странице Сергей Ясвет
         if(m_urlvars.viewer_id === '85182172'){ // Этот код выполнится только для меня
-
-
 
             console.log(555, m_urlvars.viewer_id, serv_key);
 
@@ -63,7 +62,7 @@ $(document).ready(function () {
                         url: 'https://api.vk.com/method/secure.addAppEvent?' +
                             'v=5.5131' +
                             '&user_id=' + m_urlvars.viewer_id +
-                            '&activity_id=2' +
+                            '&activity_id=1' +
                             '&value=83' +
                             '&access_token='+ serv_key +
                             '&client_id=8158397',
