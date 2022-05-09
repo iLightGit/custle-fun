@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.42';
+    const gameVersion = 'v0.1.43';
 
     console.log(gameVersion);
 
@@ -252,9 +252,8 @@ $(document).ready(function () {
                 VKajaxFN('secure.getUserLevel?user_ids=')
                 .finally(() => console.log("Промис завершён"))
                 .then(result => {
-                    console.log(result)
 
-                    let gameMaxPoints = result[0]?.level;
+                    let gameMaxPoints = result?.response[0]?.level;
 
                     console.log('здесь будем записывать рекорд222', result);
                     console.log('здесь будем записывать рекорд123', gameMaxPoints);
