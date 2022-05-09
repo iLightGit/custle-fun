@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.35';
+    const gameVersion = 'v0.1.36';
 
     console.log(gameVersion);
 
@@ -238,7 +238,8 @@ $(document).ready(function () {
 
             // оспользуем уровня для очков, т.к. очки нифига не работают
             let getUserLevel = VKajaxFN('secure.getUserLevel?user_ids=');
-            console.log('здесь будем записывать рекорд', getUserLevel, getUserLevel[0]);
+            console.log('здесь будем записывать рекорд123', getUserLevel);
+            console.log('здесь будем записывать рекорд222', getUserLevel.response[0]?.level);
             if(getUserLevel[0].level>gameResult){
                 console.log('оно работает???', gameResult);
                 let setUserLevel = VKajaxFN('secure.setUserLevel?&level='+gameResult+'&user_id=');

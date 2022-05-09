@@ -281,7 +281,7 @@ table {
 .playerScore,
 .bonusScore {
     margin: auto;
-
+    text-shadow: 1px 0 5px #fff, 0 0 21px #fff;
     border-radius: 10px;
 }
 
