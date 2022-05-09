@@ -238,10 +238,12 @@ $(document).ready(function () {
 
             // оспользуем уровня для очков, т.к. очки нифига не работают
             let getUserLevel = VKajaxFN('secure.getUserLevel?user_ids=');
-            console.log('здесь будем записывать рекорд', getUserLevel, getUserLevel.response[0]);
-            if(getUserLevel.response[0].level>gameResult){
+            console.log('здесь будем записывать рекорд', getUserLevel, getUserLevel[0]);
+            if(getUserLevel[0].level>gameResult){
                 console.log('оно работает???', gameResult);
                 let setUserLevel = VKajaxFN('secure.setUserLevel?&level='+gameResult+'&user_id=');
+            } else {
+                $('.bonusScoreFill').html('Лучший результат: '+ getUserLevel);
             }
 
 
