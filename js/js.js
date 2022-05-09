@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.33';
+    const gameVersion = 'v0.1.34';
 
     console.log(gameVersion);
 
@@ -46,7 +46,7 @@ $(document).ready(function () {
     if (typeof m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined') {
 
 
-        // Для тестов только на странице Сергей Ясвет
+        // !!!!!! Для тестов только на странице Сергей Ясвет
         if (m_urlvars.viewer_id === '85182172') { // Этот код выполнится только для меня
 
             console.log(555, m_urlvars.viewer_id, serv_key);
@@ -88,9 +88,7 @@ $(document).ready(function () {
                     })
 
                 }).catch(error => console.log(error));
-
-
-        }
+        }  // !!!!!! Для тестов только на странице Сергей Ясвет
 
 
         // $.ajax({
@@ -106,6 +104,20 @@ $(document).ready(function () {
 
     }
 
+
+    function VKajaxFN (url) {
+        $.ajax({
+            /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
+            url: 'https://api.vk.com/method/'+url+m_urlvars.viewer_id+'&v=5.5131&access_token='+serv_key,
+            type: 'GET',
+            dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
+            crossDomain: true,
+            success: function(data){
+                console.log(888, data);
+                return data;
+            }
+        })
+    }
 
     var m = [], n = [], area = 4, timeToOne = 5,//время на 1 ход
         box = $('.m_content ul'), boxLi, selectSize = $('.size'), timer_timeout;
@@ -221,6 +233,16 @@ $(document).ready(function () {
             //     .then(data => console.log(data.success))
             //     .catch(error => console.log(error));
             console.log('end game 123');
+            let gameResult = parseInt($('.playerScoreCounter').text());
+
+
+            // оспользуем уровня для очков, т.к. очки нифига не работают
+            let getUserLevel = VKajaxFN('secure.getUserLevel?user_ids=');
+            if(100>gameResult){
+                console.log('здесь будем записывать рекорд');
+                //let setUserLevel = VKajaxFN('https://api.vk.com/method/secure.setUserLevel?&level='+gameResult+'&v=5.5131&user_id='+m_urlvars.viewer_id+'&access_token='+serv_key);
+            }
+
 
             // Получаем токен приложения
             // vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
