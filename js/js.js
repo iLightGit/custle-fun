@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.34';
+    const gameVersion = 'v0.1.35';
 
     console.log(gameVersion);
 
@@ -238,9 +238,10 @@ $(document).ready(function () {
 
             // оспользуем уровня для очков, т.к. очки нифига не работают
             let getUserLevel = VKajaxFN('secure.getUserLevel?user_ids=');
-            if(100>gameResult){
-                console.log('здесь будем записывать рекорд');
-                //let setUserLevel = VKajaxFN('https://api.vk.com/method/secure.setUserLevel?&level='+gameResult+'&v=5.5131&user_id='+m_urlvars.viewer_id+'&access_token='+serv_key);
+            console.log('здесь будем записывать рекорд', getUserLevel, getUserLevel.response[0]);
+            if(getUserLevel.response[0].level>gameResult){
+                console.log('оно работает???', gameResult);
+                let setUserLevel = VKajaxFN('secure.setUserLevel?&level='+gameResult+'&user_id=');
             }
 
 
@@ -333,7 +334,7 @@ $(document).ready(function () {
     }
 
     (function addPlayerScore() {
-        $('.m_content').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Player Score: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
+        $('.m_content').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
     }());
 
     $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
