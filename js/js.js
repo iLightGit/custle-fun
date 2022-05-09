@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.41';
+    const gameVersion = 'v0.1.42';
 
     console.log(gameVersion);
 
@@ -122,11 +122,11 @@ $(document).ready(function () {
                     console.log(888, data);
                     succeed(data);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     fail(error);
                 }
             })
-        }
+        })
     }
 
     var m = [], n = [], area = 4, timeToOne = 5,//время на 1 ход
