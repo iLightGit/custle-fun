@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.38';
+    const gameVersion = 'v0.1.39';
 
     console.log(gameVersion);
 
@@ -247,23 +247,24 @@ $(document).ready(function () {
                 VKajaxFN('secure.getUserLevel?user_ids=');
             })
                 .finally(() => console.log("Промис завершён"))
-                .then(result => console.log(result));
+                .then(result => {
+                    console.log(result)
+
+                    let gameMaxPoints = result[0]?.level;
+
+                    console.log('здесь будем записывать рекорд222', result);
+                    console.log('здесь будем записывать рекорд123', gameMaxPoints);
+
+                    if (gameMaxPoints < gameResult) {
+                        console.log('оно работает???', gameResult);
+                        let setUserLevel = VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                    } else {
+                        $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+                    }
+
+                });
 
 
-
-            // getUserLevel.then((res) => {
-            //     let gameMaxPoints = res[0]?.level;
-            //
-            //     console.log('здесь будем записывать рекорд222', res);
-            //     console.log('здесь будем записывать рекорд123', gameMaxPoints);
-            //
-            //     if (gameMaxPoints < gameResult) {
-            //         console.log('оно работает???', gameResult);
-            //         let setUserLevel = VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
-            //     } else {
-            //         $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
-            //     }
-            // })
 
 
 
