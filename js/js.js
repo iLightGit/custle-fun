@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.43';
+    const gameVersion = 'v0.2';
 
     console.log(gameVersion);
 
@@ -227,6 +227,11 @@ $(document).ready(function () {
     // Проверка на завершение игры
     function checkCompleate() {
         if (($('.li.clear').size() == $('.li').size())) {
+
+            setTimeout(function(){
+
+
+
             boxLi.animate({
                 opacity: 0
             }, 700);
@@ -243,43 +248,39 @@ $(document).ready(function () {
             //     .then(data => console.log(data.success))
             //     .catch(error => console.log(error));
             console.log('end game 123');
+
+
+
             let gameResult = parseInt($('.playerScoreCounter').text());
 
-
             // оспользуем уровня для очков, т.к. очки нифига не работают
+            VKajaxFN('secure.getUserLevel?user_ids=')
+            .finally(() => console.log("Промис завершён"))
+            .then(result => {
+
+                let gameMaxPoints = result?.response[0]?.level;
+
+                console.log('здесь будем записывать рекорд222', result);
+                console.log('здесь будем записывать рекорд123', gameMaxPoints);
+
+                if (gameMaxPoints < gameResult) {
+                    console.log('оно работает???', gameResult);
+                    VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                    alert('Ура, новый рекорд! ' + gameResult);
+                } else {
+                    $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+                }
+
+            });
 
 
-                VKajaxFN('secure.getUserLevel?user_ids=')
-                .finally(() => console.log("Промис завершён"))
-                .then(result => {
-
-                    let gameMaxPoints = result?.response[0]?.level;
-
-                    console.log('здесь будем записывать рекорд222', result);
-                    console.log('здесь будем записывать рекорд123', gameMaxPoints);
-
-                    if (gameMaxPoints < gameResult) {
-                        console.log('оно работает???', gameResult);
-                        VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
-                        alert('Ура, новый рекорд! ' + gameResult);
-                    } else {
-                        $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
-                    }
-
-                });
-
-
-
-
-
-
-
+            
             // Получаем токен приложения
             // vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
             //     .then(data => {
             //         console.log(data);
             //     }).catch(error => console.log(error));
-
+            }, 1050);
 
         }
     };
