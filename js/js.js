@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.39';
+    const gameVersion = 'v0.1.40';
 
     console.log(gameVersion);
 
@@ -111,17 +111,22 @@ $(document).ready(function () {
 
 
     function VKajaxFN(url) {
-        $.ajax({
-            /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-            url: 'https://api.vk.com/method/' + url + m_urlvars.viewer_id + '&v=5.5131&access_token=' + serv_key,
-            type: 'GET',
-            dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
-            crossDomain: true,
-            success: function (data) {
-                console.log(888, data);
-                return data;
-            }
-        })
+        return new Promise((succeed, fail) => {
+            $.ajax({
+                /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
+                url: 'https://api.vk.com/method/' + url + m_urlvars.viewer_id + '&v=5.5131&access_token=' + serv_key,
+                type: 'GET',
+                dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
+                crossDomain: true,
+                success: function (data) {
+                    console.log(888, data);
+                    succeed(data);
+                },
+                error: function(xhr, status, error) {
+                    fail(error);
+                }
+            })
+        }
     }
 
     var m = [], n = [], area = 4, timeToOne = 5,//время на 1 ход
@@ -243,9 +248,8 @@ $(document).ready(function () {
 
             // оспользуем уровня для очков, т.к. очки нифига не работают
 
-            new Promise((resolve, reject) => {
-                VKajaxFN('secure.getUserLevel?user_ids=');
-            })
+
+                VKajaxFN('secure.getUserLevel?user_ids=')
                 .finally(() => console.log("Промис завершён"))
                 .then(result => {
                     console.log(result)
@@ -257,7 +261,7 @@ $(document).ready(function () {
 
                     if (gameMaxPoints < gameResult) {
                         console.log('оно работает???', gameResult);
-                        let setUserLevel = VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                        VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
                     } else {
                         $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
                     }
