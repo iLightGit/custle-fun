@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.40';
+    const gameVersion = 'v0.1.41';
 
     console.log(gameVersion);
 
@@ -262,6 +262,7 @@ $(document).ready(function () {
                     if (gameMaxPoints < gameResult) {
                         console.log('оно работает???', gameResult);
                         VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                        alert('Ура, новый рекорд! ' + gameResult);
                     } else {
                         $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
                     }
