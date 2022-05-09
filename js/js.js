@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.36';
+    const gameVersion = 'v0.1.37';
 
     console.log(gameVersion);
 
@@ -60,16 +60,21 @@ $(document).ready(function () {
                     console.log(777, data);
 
 
-
-
                     vkBridge.send("VKWebAppCallAPIMethod", {
                         "method": "secure.addAppEvent",
                         "request_id": gameVersion,
-                        "params": {"user_id": m_urlvars.viewer_id, "v": "5.5131", "access_token": serv_key, "value": "83", "activity_id":"2"}
+                        "params": {
+                            "user_id": m_urlvars.viewer_id,
+                            "v": "5.5131",
+                            "access_token": serv_key,
+                            "value": "83",
+                            "activity_id": "2"
+                        }
                     })
                         .then(data => {
                             console.log(3333, data);
-                        }).catch(error => console.log(error));;
+                        }).catch(error => console.log(error));
+                    ;
 
                     $.ajax({
                         /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
@@ -105,14 +110,14 @@ $(document).ready(function () {
     }
 
 
-    function VKajaxFN (url) {
+    function VKajaxFN(url) {
         $.ajax({
             /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-            url: 'https://api.vk.com/method/'+url+m_urlvars.viewer_id+'&v=5.5131&access_token='+serv_key,
+            url: 'https://api.vk.com/method/' + url + m_urlvars.viewer_id + '&v=5.5131&access_token=' + serv_key,
             type: 'GET',
             dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
             crossDomain: true,
-            success: function(data){
+            success: function (data) {
                 console.log(888, data);
                 return data;
             }
@@ -238,14 +243,22 @@ $(document).ready(function () {
 
             // оспользуем уровня для очков, т.к. очки нифига не работают
             let getUserLevel = VKajaxFN('secure.getUserLevel?user_ids=');
-            console.log('здесь будем записывать рекорд123', getUserLevel);
-            console.log('здесь будем записывать рекорд222', getUserLevel.response[0]?.level);
-            if(getUserLevel[0].level>gameResult){
-                console.log('оно работает???', gameResult);
-                let setUserLevel = VKajaxFN('secure.setUserLevel?&level='+gameResult+'&user_id=');
-            } else {
-                $('.bonusScoreFill').html('Лучший результат: '+ getUserLevel);
-            }
+            getUserLevel.then((res) => {
+                let gameMaxPoints = res[0]?.level;
+
+                console.log('здесь будем записывать рекорд222', res);
+                console.log('здесь будем записывать рекорд123', gameMaxPoints);
+
+                if (gameMaxPoints < gameResult) {
+                    console.log('оно работает???', gameResult);
+                    let setUserLevel = VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                } else {
+                    $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+                }
+            })
+
+
+
 
 
             // Получаем токен приложения
