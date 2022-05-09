@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.1.37';
+    const gameVersion = 'v0.1.38';
 
     console.log(gameVersion);
 
@@ -242,20 +242,28 @@ $(document).ready(function () {
 
 
             // оспользуем уровня для очков, т.к. очки нифига не работают
-            let getUserLevel = VKajaxFN('secure.getUserLevel?user_ids=');
-            getUserLevel.then((res) => {
-                let gameMaxPoints = res[0]?.level;
 
-                console.log('здесь будем записывать рекорд222', res);
-                console.log('здесь будем записывать рекорд123', gameMaxPoints);
-
-                if (gameMaxPoints < gameResult) {
-                    console.log('оно работает???', gameResult);
-                    let setUserLevel = VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
-                } else {
-                    $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
-                }
+            new Promise((resolve, reject) => {
+                VKajaxFN('secure.getUserLevel?user_ids=');
             })
+                .finally(() => console.log("Промис завершён"))
+                .then(result => console.log(result));
+
+
+
+            // getUserLevel.then((res) => {
+            //     let gameMaxPoints = res[0]?.level;
+            //
+            //     console.log('здесь будем записывать рекорд222', res);
+            //     console.log('здесь будем записывать рекорд123', gameMaxPoints);
+            //
+            //     if (gameMaxPoints < gameResult) {
+            //         console.log('оно работает???', gameResult);
+            //         let setUserLevel = VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+            //     } else {
+            //         $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+            //     }
+            // })
 
 
 
