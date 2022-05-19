@@ -140,8 +140,9 @@ table {
     transform: translate3d(0, 0, 3px);
     opacity: 0.9;
     display: block;
-    background-size: 100%;
-    background-position: 13px 53px;
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 
@@ -329,3 +330,81 @@ table {
     left: 50%;
     z-index: 5;
 }
+
+body {
+    background: url("../img/bg/0.png") center;
+}
+
+/* MENU */
+.menuLevelBox {
+    text-align: center;
+    width: 600px;
+    margin: auto;
+}
+.menuLevel{
+    position: relative;
+    cursor: pointer;
+    width: 150px;
+    height: 100px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+    box-shadow: 0 0 0 5px #000, 0 0 0 3px #fff inset;
+    display: inline-block;
+    margin: 10px;
+    filter: grayscale(100%);
+}
+.menuLevel_1 {
+    background-image: url("../img/bg/1.jpg");
+    filter: grayscale(0);
+}
+.menuLevel_2 {
+    background-image: url("../img/bg/2.jpg");
+}
+.menuLevel_3 {
+    background-image: url("../img/bg/3.jpg");
+}
+.menuLevel_4 {
+    background-image: url("../img/bg/4.jpg");
+}
+.menuLevel_5 {
+    background-image: url("../img/bg/5.jpg");
+}
+.menuLevel_6 {
+    background-image: url("../img/bg/6.jpg");
+}
+.menuStarBox {
+    margin: 38px auto 0;
+    text-align: center;
+    display: none;
+}
+.menuStar{
+    filter: grayscale(100%);
+    background: url("../img/menu/star.png") center border-box no-repeat transparent;
+
+    background-size: 50px;
+    width: 36px;
+    height: 28px;
+    display: inline-block;
+}
+/*.menuLevel:before{*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    top:0;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    background: #000;*/
+/*    opacity: 0.1;*/
+/*    !*opacity: .9;*!*/
+/*}*/
+.menuLevel:hover{
+    filter: grayscale(0%);
+}
+/*.menuLevel:hover:before{*/
+/*    opacity: .3;*/
+/*}*/
+/* MENU */
+
+

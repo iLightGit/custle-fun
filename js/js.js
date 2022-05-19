@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.2';
+    const gameVersion = 'v0.21';
 
     console.log(gameVersion);
 
@@ -139,10 +139,11 @@ $(document).ready(function () {
     }
 
 
-    function start(area) {
+    function start(areaX, areaY = areaX) {
+
         box.html('');
         m = [];
-        let icount = area * area;
+        let icount = areaX * areaY;
         for (i = 0; i < icount / 2; i++) {
             n = m.push(i + 1);
             n = m.push(i + 1);
@@ -162,7 +163,7 @@ $(document).ready(function () {
 
         boxLi = $('.m_content li');
 
-        box.css('width', boxLi.outerWidth() * area);
+        box.css('width', boxLi.outerWidth() * areaY);
         box.css('background-position', position_1.random() + ' ' + position_2.random());
 
         viewElements();
@@ -170,15 +171,8 @@ $(document).ready(function () {
 
     }
 
-
-    selectSize.change(function () {
-        opt = $(this).val();
-        val = $(this).find('option').eq(opt - 1).text();
-        start(val);
-
-    });
-
     var firstEL, lastEL;
+
 
     $('.m_content ').on('click', '.li', function (e) {
         e.preventDefault();
@@ -188,6 +182,8 @@ $(document).ready(function () {
             if (!(parent.hasClass('locked'))) {
                 el.addClass('active');
                 if (boxLi.find('.active').size() == 2) {
+                    console.log('active 2');
+                    parent.addClass('locked');
                     firstEL = $('.li.active:first');
                     lastEL = $('.li.active:last');
                     firstEL.addClass('first');
@@ -199,11 +195,13 @@ $(document).ready(function () {
                         if (bonusPoints) {
                             $('.bonusScoreCounter').html(bonusPoints - 1);
                         }
-
+                        parent.removeClass('locked');
 
                     }, 500);
 
                 }
+
+                // Если открывалась 3-я, то закрывались 2 другие
                 if (boxLi.find('.active').size() == 3) {
                     $('.li.first, .li.last').removeClass('active first last');
                 }
@@ -285,16 +283,24 @@ $(document).ready(function () {
         }
     };
 
+    // Анимированное отрытие всего поля
     function viewElements() {
+        $('.m_content').addClass('locked');
         isize = $('.m_content li').size();
 
         var i = 0;
 
 
-        setInterval(function () {
+        let viewElementsIntervel = setInterval(function () {
 
             asd(i);
             i++
+
+            if(i > isize){
+                clearInterval(viewElementsIntervel);
+                setTimeout(function(){$('.m_content').removeClass('locked');}, 400)
+            }
+
         }, 300);
 
         function asd(i) {
@@ -304,6 +310,9 @@ $(document).ready(function () {
             }, 700);
         }
     }
+
+
+
 
 // Верия без анимации открытия плиток
     // function viewElements() {
@@ -327,12 +336,12 @@ $(document).ready(function () {
     //
     // }
 
-    function showel(i) {
-        boxLi.eq(i).find('.li').addClass('showElement');
-        setTimeout(function () {
-            boxLi.eq(i).find('.li').removeClass('showElement');
-        }, 700);
-    }
+    // function showel(i) {
+    //     boxLi.eq(i).find('.li').addClass('showElement');
+    //     setTimeout(function () {
+    //         boxLi.eq(i).find('.li').removeClass('showElement');
+    //     }, 700);
+    // }
 
 
     function getScore(el) {
@@ -370,7 +379,7 @@ $(document).ready(function () {
     $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
 
     $(window).load(function () {
-        start(area);
+        start(2, 2);
     });
 
 });
