@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.4';
+    const gameVersion = 'v0.41';
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
