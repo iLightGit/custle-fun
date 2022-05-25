@@ -8,7 +8,10 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.21';
+    const gameVersion = 'v0.4';
+    let gameLevel = 1;
+    let dataSizeX = 2;
+    let dataSizeY = 2;
 
     console.log(gameVersion);
 
@@ -139,8 +142,9 @@ $(document).ready(function () {
     }
 
 
-    function start(areaX, areaY = areaX) {
+    function start(areaX, areaY = areaX, level = 1) {
 
+        gameLevel = level;
         box.html('');
         m = [];
         let icount = areaX * areaY;
@@ -226,58 +230,66 @@ $(document).ready(function () {
     function checkCompleate() {
         if (($('.li.clear').size() == $('.li').size())) {
 
-            setTimeout(function(){
+            setTimeout(function () {
 
 
+                boxLi.animate({
+                    opacity: 0
+                }, 700);
 
-            boxLi.animate({
-                opacity: 0
-            }, 700);
+                $('.gameContainer').append('<div class="btnMenuBox"><div class="btnMenu btnRestart" data-size-x="'+dataSizeX+'" data-size-y="'+dataSizeY+'"></div><div class="btnMenu btnHome" data-level="'+gameLevel+'"></div></div>');
 
-            $('.gameBox').append('<div class="btnRestart"></div>');
-            $('.m_content').find('.btnRestart').on('click', function () {
-                document.location.reload();
-            });
+                $('.m_content').find('.btnRestart').on('click', function () {
+                    removeLevel();
+                    start($(this).data('size-x'), $(this).data('size-y'), gameLevel);
+                });
 
-            // Вынести в событие
-            // Ипользуется только для мобилок
-            // Выводить только для первого раза или при установлении рекорда
-            // vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:parseInt($('.playerScoreCounter').text())})
-            //     .then(data => console.log(data.success))
-            //     .catch(error => console.log(error));
-            console.log('end game 123');
+                $('.m_content').find('.btnHome').on('click', function () {
+                    let completeLvl = $(this).data('level');
 
+                    $('.menuLevel').eq(completeLvl-1).addClass('menuLevel_complete');
+                    $('.gameBox').hide();
+                    removeLevel();
+                    $('.menuLevelBox').show();
+                });
 
-
-            let gameResult = parseInt($('.playerScoreCounter').text());
-
-            // оспользуем уровня для очков, т.к. очки нифига не работают
-            VKajaxFN('secure.getUserLevel?user_ids=')
-            .finally(() => console.log("Промис завершён"))
-            .then(result => {
-
-                let gameMaxPoints = result?.response[0]?.level;
-
-                console.log('здесь будем записывать рекорд222', result);
-                console.log('здесь будем записывать рекорд123', gameMaxPoints);
-
-                if (gameMaxPoints < gameResult) {
-                    console.log('оно работает???', gameResult);
-                    VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
-                    alert('Ура, новый рекорд! ' + gameResult);
-                } else {
-                    $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
-                }
-
-            });
+                // Вынести в событие
+                // Ипользуется только для мобилок
+                // Выводить только для первого раза или при установлении рекорда
+                // vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:parseInt($('.playerScoreCounter').text())})
+                //     .then(data => console.log(data.success))
+                //     .catch(error => console.log(error));
+                console.log('end game 123');
 
 
-            
-            // Получаем токен приложения
-            // vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
-            //     .then(data => {
-            //         console.log(data);
-            //     }).catch(error => console.log(error));
+                let gameResult = parseInt($('.playerScoreCounter').text());
+
+                // оспользуем уровня для очков, т.к. очки нифига не работают
+                VKajaxFN('secure.getUserLevel?user_ids=')
+                    .finally(() => console.log("Промис завершён"))
+                    .then(result => {
+
+                        let gameMaxPoints = result?.response[0]?.level;
+
+                        console.log('здесь будем записывать рекорд222', result);
+                        console.log('здесь будем записывать рекорд123', gameMaxPoints);
+
+                        if (gameMaxPoints < gameResult) {
+                            console.log('оно работает???', gameResult);
+                            VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                            alert('Ура, новый рекорд! ' + gameResult);
+                        } else {
+                            $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+                        }
+
+                    });
+
+
+                // Получаем токен приложения
+                // vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
+                //     .then(data => {
+                //         console.log(data);
+                //     }).catch(error => console.log(error));
             }, 1050);
 
         }
@@ -296,9 +308,11 @@ $(document).ready(function () {
             asd(i);
             i++
 
-            if(i > isize){
+            if (i > isize) {
                 clearInterval(viewElementsIntervel);
-                setTimeout(function(){$('.m_content').removeClass('locked');}, 400)
+                setTimeout(function () {
+                    $('.m_content').removeClass('locked');
+                }, 400)
             }
 
         }, 300);
@@ -310,8 +324,6 @@ $(document).ready(function () {
             }, 700);
         }
     }
-
-
 
 
 // Верия без анимации открытия плиток
@@ -369,17 +381,35 @@ $(document).ready(function () {
     }
 
     function addBonusPoints() {
-        $('.m_content').prepend('<div class="bonusScoreBox"><div class="bonusScore"><div class="bonusScoreFill">Бонусные ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div></div>');
+        $('.gameContainer').prepend('<div class="bonusScoreBox"><div class="bonusScore"><div class="bonusScoreFill">Бонусные ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div></div>');
     }
 
     (function addPlayerScore() {
-        $('.m_content').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
+        $('.gameContainer').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
     }());
 
     $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
 
+    function removeLevel(){
+        $('.bonusScoreBox').remove();
+        $('.btnMenuBox').remove();
+        $('.playerScoreCounter').text(0);
+    }
+
+    $('.menuLevel').on('click', function(){
+        dataSizeX = $(this).data('size-x');
+        dataSizeY = $(this).data('size-y');
+
+        gameLevel = $(this).index()+1;
+
+        $('.gameBox').show();
+        $('.menuLevelBox').hide();
+        start(dataSizeX, dataSizeY, gameLevel);
+    });
+
+
     $(window).load(function () {
-        start(2, 2);
+        start(2, 2, 1);
     });
 
 });

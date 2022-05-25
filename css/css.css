@@ -316,19 +316,34 @@ table {
     position: relative;
 }
 
-.btnRestart {
-    width: 60px;
-    height: 60px;
-    margin-top: -30px;
-    margin-left: -30px;
-    background: url("../img/btn/reload.png") 3px 3px border-box no-repeat white;
-    border-radius: 100%;
-    background-size: 54px;
-    cursor: pointer;
+.btnMenuBox {
+    margin-top: -45px;
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
     z-index: 5;
+}
+
+.btnMenu {
+    width: 60px;
+    height: 60px;
+    margin: 0 5px;
+    background: url("../img/btn/reload.png") border-box no-repeat white;
+    border-radius: 100%;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    box-shadow: 0 0 0 3px #fff;
+}
+
+.btnRestart {
+    background-image: url("../img/btn/reload.png");
+}
+
+.btnHome {
+    background-image: url("../img/btn/home.png");
 }
 
 body {
@@ -355,9 +370,13 @@ body {
     margin: 10px;
     filter: grayscale(100%);
 }
+
+.menuLevel_complete{
+    filter: grayscale(0);
+}
+
 .menuLevel_1 {
     background-image: url("../img/bg/1.jpg");
-    filter: grayscale(0);
 }
 .menuLevel_2 {
     background-image: url("../img/bg/2.jpg");
