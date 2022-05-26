@@ -316,7 +316,7 @@ table {
     position: relative;
 }
 
-.btnMenuBox {
+.btnMenuContent {
     margin-top: -45px;
     position: absolute;
     top: 50%;
@@ -326,16 +326,27 @@ table {
     z-index: 5;
 }
 
+.btnMenuBox:before{
+    content: "";
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1;
+}
+
 .btnMenu {
     width: 60px;
     height: 60px;
-    margin: 0 5px;
-    background: url("../img/btn/reload.png") border-box no-repeat white;
+    margin: 0 10px;
+    background: url("../img/btn/reload.png") center border-box no-repeat white;
     border-radius: 100%;
     background-size: contain;
     cursor: pointer;
     display: inline-block;
-    box-shadow: 0 0 0 3px #fff;
+    box-shadow: 0 0 0 4px #fff, 0 0 0 7px #000;
 }
 
 .btnRestart {
@@ -407,6 +418,31 @@ body {
     height: 28px;
     display: inline-block;
 }
+
+.btnMenuBox{
+    /*position: relative;*/
+}
+
+.btnMenuBox .menuStarBox{
+    position: absolute;
+    z-index: 10;
+    display: block;
+    top: 100px;
+    left: 50%;
+    margin-left: -162px;
+    margin-top: 0;
+}
+
+.btnMenuBox .menuStar {
+    width: 105px;
+    height: 102px;
+    background-size: 102px;
+}
+
+.btnMenuBox .menuStar.active {
+    filter: grayscale(0);
+}
+
 /*.menuLevel:before{*/
 /*    content: '';*/
 /*    position: absolute;*/

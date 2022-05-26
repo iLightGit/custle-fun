@@ -8,10 +8,18 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.42';
+    const gameVersion = 'v0.50';
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
+    const starLegend = [
+        [7, 5],
+        [50, 40],
+        [60, 50],
+        [70, 50],
+        [100, 70],
+        [120, 90]
+    ];
 
     console.log(gameVersion);
 
@@ -144,7 +152,7 @@ $(document).ready(function () {
 
     function start(areaY, areaX, level = 1) {
 
-        gameLevel = level;
+        gameLevel = parseInt(level);
         box.html('');
         m = [];
         let icount = areaX * areaY;
@@ -237,21 +245,38 @@ $(document).ready(function () {
                     opacity: 0
                 }, 700);
 
-                $('.gameContainer').append('<div class="btnMenuBox"><div class="btnMenu btnRestart" data-size-x="'+dataSizeX+'" data-size-y="'+dataSizeY+'"></div><div class="btnMenu btnHome" data-level="'+gameLevel+'"></div></div>');
+                $('body').append('<div class="btnMenuBox"><div class="menuStarBox js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div><div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div><div class="btnMenu btnHome" data-level="' + gameLevel + '"></div></div></div>');
 
-                $('.m_content').find('.btnRestart').on('click', function () {
+                $('body').find('.btnRestart').on('click', function () {
                     removeLevel();
                     start($(this).data('size-x'), $(this).data('size-y'), gameLevel);
                 });
 
-                $('.m_content').find('.btnHome').on('click', function () {
+                $('body').find('.btnHome').on('click', function () {
                     let completeLvl = $(this).data('level');
 
-                    $('.menuLevel').eq(completeLvl-1).addClass('menuLevel_complete');
+                    $('.menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
                     $('.gameBox').hide();
                     removeLevel();
-                    $('.menuLevelBox').show();
+                    $('.js-menuMainLevelBox').show();
                 });
+
+
+                let stLegend = starLegend[parseInt(gameLevel) - 1];
+                let sScore = parseInt($('.playerScoreCounter').text());
+                let sCount = 1; // По дефолту всегда 1 звезда
+
+
+                if (sScore >= stLegend[0]) { // 3 звезды
+                    sCount = 3;
+                } else if (sScore >= stLegend[1]) { // 2 звезды
+                    sCount = 2;
+                }
+
+                for (let i = 0; i < sCount; i++) {
+                    console.log('js-menuOneLevelBox i', i);
+                    $('.js-menuOneLevelBox i').eq(i).addClass('active');
+                }
 
                 // Вынести в событие
                 // Ипользуется только для мобилок
@@ -390,17 +415,17 @@ $(document).ready(function () {
 
     $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
 
-    function removeLevel(){
+    function removeLevel() {
         $('.bonusScoreBox').remove();
         $('.btnMenuBox').remove();
         $('.playerScoreCounter').text(0);
     }
 
-    $('.menuLevel').on('click', function(){
+    $('.menuLevel').on('click', function () {
         dataSizeX = $(this).data('size-x');
         dataSizeY = $(this).data('size-y');
 
-        gameLevel = $(this).index()+1;
+        gameLevel = $(this).index() + 1;
 
         $('.gameBox').show();
         $('.menuLevelBox').hide();
