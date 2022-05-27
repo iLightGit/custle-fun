@@ -317,9 +317,8 @@ table {
 }
 
 .btnMenuContent {
-    margin-top: -45px;
     position: absolute;
-    top: 50%;
+    bottom: 50px;
     left: 0;
     width: 100%;
     text-align: center;
@@ -378,12 +377,31 @@ body {
     border-radius: 5px;
     box-shadow: 0 0 0 5px #000, 0 0 0 3px #fff inset;
     display: inline-block;
-    margin: 10px;
+    margin: 12px 10px;
     filter: grayscale(100%);
+}
+
+.menuLevel_open{
+    filter: grayscale(0);
 }
 
 .menuLevel_complete{
     filter: grayscale(0);
+}
+
+.menuLevel_complete .menuStarBox.mod--mainSB {
+    opacity: 1;
+}
+
+.menuLevel_complete.menuLevel:before {
+    content: "";
+    position: absolute;
+    top:0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    background: rgba(0,0,0,0.15);
 }
 
 .menuLevel_1 {
@@ -407,8 +425,15 @@ body {
 .menuStarBox {
     margin: 38px auto 0;
     text-align: center;
-    display: none;
+    position: relative;
+    z-index: 5;
+
 }
+
+.menuStarBox.mod--mainSB{
+    opacity: 0;
+}
+
 .menuStar{
     filter: grayscale(100%);
     background: url("../img/menu/star.png") center border-box no-repeat transparent;
@@ -427,7 +452,7 @@ body {
     position: absolute;
     z-index: 10;
     display: block;
-    top: 100px;
+    top: 50px;
     left: 50%;
     margin-left: -162px;
     margin-top: 0;
@@ -439,27 +464,10 @@ body {
     background-size: 102px;
 }
 
-.btnMenuBox .menuStar.active {
+.menuStar.active {
     filter: grayscale(0);
 }
 
-/*.menuLevel:before{*/
-/*    content: '';*/
-/*    position: absolute;*/
-/*    top:0;*/
-/*    bottom: 0;*/
-/*    left: 0;*/
-/*    right: 0;*/
-/*    background: #000;*/
-/*    opacity: 0.1;*/
-/*    !*opacity: .9;*!*/
-/*}*/
-.menuLevel:hover{
-    filter: grayscale(0%);
-}
-/*.menuLevel:hover:before{*/
-/*    opacity: .3;*/
-/*}*/
 /* MENU */
 
 

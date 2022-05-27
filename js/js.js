@@ -8,14 +8,14 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.51';
+    const gameVersion = 'v0.6';
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
     const starLegend = [
         [7, 5],
         [50, 40],
-        [60, 50],
+        [70, 50],
         [100, 70],
         [180, 150],
         [220, 180]
@@ -245,7 +245,7 @@ $(document).ready(function () {
                     opacity: 0
                 }, 700);
 
-                $('body').append('<div class="btnMenuBox"><div class="menuStarBox js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div><div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div><div class="btnMenu btnHome" data-level="' + gameLevel + '"></div></div></div>');
+                $('body').append('<div class="btnMenuBox"><div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div><div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div><div class="btnMenu btnHome" data-level="' + gameLevel + '"></div></div></div>');
 
                 $('body').find('.btnRestart').on('click', function () {
                     removeLevel();
@@ -253,9 +253,11 @@ $(document).ready(function () {
                 });
 
                 $('body').find('.btnHome').on('click', function () {
+                    console.log('возможно этот клик множится');
                     let completeLvl = $(this).data('level');
 
                     $('.menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
+                    $('.menuLevel').eq(completeLvl).addClass('menuLevel_open');
                     $('.gameBox').hide();
                     removeLevel();
                     $('.js-menuMainLevelBox').show();
@@ -273,10 +275,24 @@ $(document).ready(function () {
                     sCount = 2;
                 }
 
-                for (let i = 0; i < sCount; i++) {
-                    console.log('js-menuOneLevelBox i', i);
-                    $('.js-menuOneLevelBox i').eq(i).addClass('active');
+                let mainStarBox = $('.js-mainStarBox').eq(gameLevel-1);
+                let mainStarBoxDataStar = mainStarBox.data('star');
+
+                console.log(999, sCount, mainStarBoxDataStar, 999, mainStarBox.find('.menuStar'));
+
+                if (sCount > mainStarBoxDataStar) {
+                    addStarFN(mainStarBox.find('.menuStar'));
+                    mainStarBox.data('star', sCount)
                 }
+
+                addStarFN($('.js-menuOneLevelBox .menuStar'));
+
+                function addStarFN(el) {
+                    for (let i = 0; i < sCount; i++) {
+                        el.eq(i).addClass('active');
+                    }
+                }
+
 
                 // Вынести в событие
                 // Ипользуется только для мобилок
@@ -422,14 +438,16 @@ $(document).ready(function () {
     }
 
     $('.menuLevel').on('click', function () {
-        dataSizeX = $(this).data('size-x');
-        dataSizeY = $(this).data('size-y');
+        if ($(this).hasClass('menuLevel_open')) {
+            dataSizeX = $(this).data('size-x');
+            dataSizeY = $(this).data('size-y');
 
-        gameLevel = $(this).index() + 1;
+            gameLevel = $(this).index() + 1;
 
-        $('.gameBox').show();
-        $('.menuLevelBox').hide();
-        start(dataSizeX, dataSizeY, gameLevel);
+            $('.gameBox').show();
+            $('.menuLevelBox').hide();
+            start(dataSizeX, dataSizeY, gameLevel);
+        }
     });
 
 
