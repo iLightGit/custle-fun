@@ -8,7 +8,7 @@ $(document).ready(function () {
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.6';
+    const gameVersion = 'v0.61';
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
@@ -16,7 +16,7 @@ $(document).ready(function () {
         [7, 5],
         [50, 40],
         [70, 50],
-        [100, 70],
+        [110, 70],
         [180, 150],
         [220, 180]
     ];
@@ -275,7 +275,7 @@ $(document).ready(function () {
                     sCount = 2;
                 }
 
-                let mainStarBox = $('.js-mainStarBox').eq(gameLevel-1);
+                let mainStarBox = $('.js-mainStarBox').eq(gameLevel - 1);
                 let mainStarBoxDataStar = mainStarBox.data('star');
 
                 console.log(999, sCount, mainStarBoxDataStar, 999, mainStarBox.find('.menuStar'));
@@ -314,14 +314,16 @@ $(document).ready(function () {
 
                         console.log('здесь будем записывать рекорд222', result);
                         console.log('здесь будем записывать рекорд123', gameMaxPoints);
-
-                        if (gameMaxPoints < gameResult) {
-                            console.log('оно работает???', gameResult);
-                            VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
-                            alert('Ура, новый рекорд! ' + gameResult);
-                        } else {
-                            $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+                        console.log('оно работает???', gameResult);
+                        if (gameResult > 100) {
+                            if (gameResult > gameMaxPoints) {
+                                VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                                alert('Ура, новый личный рекорд! ' + gameResult);
+                            } else {
+                                $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
+                            }
                         }
+
 
                     });
 
