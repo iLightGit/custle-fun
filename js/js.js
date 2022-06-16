@@ -1,14 +1,14 @@
 $(document).ready(function () {
 
     //TODO иногда зачисляется 0 в Очки
-    //TODO Если 2 одинаковая картинка до конца не раскрылась и нажать на 3-ю, очки начисляются, но картинки закрываются обратно
-    //TODO можно начать переворачивать во время анимации старта
+    //На мобилке границы карточек не точные (есть дыры)
+
 
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.61';
+    const gameVersion = 'v0.62';
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
@@ -226,7 +226,9 @@ $(document).ready(function () {
             $('.li.first, .li.last').addClass('clear').animate({
                 fontSize: "0em"
             }, 500);
-            getScore(firstEL);
+            if(parseInt($('.bonusScoreCounter').text()) > 0) {
+                getScore(firstEL);
+            }
         }
         setTimeout(function () {
             $('.li.first, .li.last').removeClass('active first last');
@@ -305,7 +307,7 @@ $(document).ready(function () {
 
                 let gameResult = parseInt($('.playerScoreCounter').text());
 
-                // оспользуем уровня для очков, т.к. очки нифига не работают
+                // используем уровни для очков, т.к. очки нифига не работают
                 VKajaxFN('secure.getUserLevel?user_ids=')
                     .finally(() => console.log("Промис завершён"))
                     .then(result => {
