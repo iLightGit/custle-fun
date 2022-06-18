@@ -4,11 +4,15 @@ $(document).ready(function () {
     //На мобилке границы карточек не точные (есть дыры)
 
 
-    // Вынести в он старт
+// Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
 
-    const gameVersion = 'v0.62';
+    const gameVersion = 'v0.63';
+
+    const imgDir = './img/pet/';
+    const imgExt = '.png';
+
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
@@ -37,14 +41,13 @@ $(document).ready(function () {
 
     console.log('request №1');
 
-    var m_httpVars = window.location.search.substring(1).split("&");
-    var m_urlvars = {};
-
-    for (var i in m_httpVars) {
-        var s = String(m_httpVars[i]).split("=");
-        var key = String(s[0]);
-        var value = String(s[1]);
-        m_urlvars[key] = value;
+    const m_httpVars = window.location.search.substring(1).split("&");
+    const m_urlvars = {};
+    let i;
+    for (i in m_httpVars) {
+        const s = String(m_httpVars[i]).split("=");
+        const key = String(s[0]);
+        m_urlvars[key] = String(s[1]);
     }
 
     console.log('m_httpVars', m_httpVars);
@@ -85,7 +88,7 @@ $(document).ready(function () {
                         .then(data => {
                             console.log(3333, data);
                         }).catch(error => console.log(error));
-                    ;
+
 
                     $.ajax({
                         /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
@@ -140,8 +143,9 @@ $(document).ready(function () {
         })
     }
 
-    var m = [], n = [], area = 4, timeToOne = 5,//время на 1 ход
-        box = $('.m_content ul'), boxLi, selectSize = $('.size'), timer_timeout;
+    let m = [],
+        n = [],
+        box = $('.m_content ul'), boxLi;
     const position_1 = ['top', 'center', 'bottom'];
     const position_2 = ['right', 'center', 'left'];
 
@@ -155,21 +159,20 @@ $(document).ready(function () {
         gameLevel = parseInt(level);
         box.html('');
         m = [];
-        let icount = areaX * areaY;
-        for (i = 0; i < icount / 2; i++) {
+        let number = areaX * areaY;
+        for (i = 0; i < number / 2; i++) {
             n = m.push(i + 1);
             n = m.push(i + 1);
         }
 
-        let newcount = icount - 2;
+        let newcount = number - 2;
         let newMass = [];
 
-        for (let i = 0; i < icount; i++) {
-            let newm = m, rand = Math.floor((Math.random() * newcount) + 1), removed = newm.splice(rand, 1);
-            n = newm.shift();
-            var t = newm.push(n);
+        for (let i = 0; i < number; i++) {
+            let m1 = m, rand = Math.floor((Math.random() * newcount) + 1), removed = m1.splice(rand, 1);
+            n = m1.push(m1.shift());
             n = newMass.push(removed[0]);
-            box.append('<li><div class="li"><div class="bg"></div><div class="block" style="background-image: url(./img/pet/' + removed[0] + '.png)">' + removed[0] + '</div></div></li>');
+            box.append('<li><div class="li"><div class="bg"></div><div class="block" style="background-image: url(' + imgDir + removed[0] + imgExt + ')">' + removed[0] + '</div></div></li>');
             newcount--;
         }
 
@@ -183,17 +186,17 @@ $(document).ready(function () {
 
     }
 
-    var firstEL, lastEL;
+    let firstEL, lastEL;
 
 
     $('.m_content ').on('click', '.li', function (e) {
         e.preventDefault();
-        el = $(this);
+        let el = $(this);
         parent = el.closest('.m_content');
         if (!(el.hasClass('clear'))) {
             if (!(parent.hasClass('locked'))) {
                 el.addClass('active');
-                if (boxLi.find('.active').size() == 2) {
+                if (boxLi.find('.active').size() === 2) {
                     console.log('active 2');
                     parent.addClass('locked');
                     firstEL = $('.li.active:first');
@@ -214,7 +217,7 @@ $(document).ready(function () {
                 }
 
                 // Если открывалась 3-я, то закрывались 2 другие
-                if (boxLi.find('.active').size() == 3) {
+                if (boxLi.find('.active').size() === 3) {
                     $('.li.first, .li.last').removeClass('active first last');
                 }
             }
@@ -222,23 +225,23 @@ $(document).ready(function () {
     });
 
     function check(firstEL, lastEL) {
-        if (firstEL.text() == lastEL.text()) {
+        if (firstEL.text() === lastEL.text()) {
             $('.li.first, .li.last').addClass('clear').animate({
                 fontSize: "0em"
             }, 500);
-            if(parseInt($('.bonusScoreCounter').text()) > 0) {
-                getScore(firstEL);
+            if (parseInt($('.bonusScoreCounter').text()) > 0) {
+                getScore();
             }
         }
         setTimeout(function () {
             $('.li.first, .li.last').removeClass('active first last');
         }, 600);
         checkCompleate();
-    };
+    }
 
     // Проверка на завершение игры
     function checkCompleate() {
-        if (($('.li.clear').size() == $('.li').size())) {
+        if (($('.li.clear').size() === $('.li').size())) {
 
             setTimeout(function () {
 
@@ -338,14 +341,14 @@ $(document).ready(function () {
             }, 1050);
 
         }
-    };
+    }
 
     // Анимированное отрытие всего поля
     function viewElements() {
         $('.m_content').addClass('locked');
         isize = $('.m_content li').size();
 
-        var i = 0;
+        let i = 0;
 
 
         let viewElementsIntervel = setInterval(function () {
@@ -401,7 +404,7 @@ $(document).ready(function () {
     // }
 
 
-    function getScore(el) {
+    function getScore() {
         iScore = $('.playerScoreCounter');
         // bonusVal = parseInt(el.find('.block').text()); // Очки каждой клетки
         bonusScore = parseInt($('.bonusScoreCounter').text());
@@ -409,8 +412,9 @@ $(document).ready(function () {
         newval = bonusScore;
 
         oldval = parseInt(iScore.text());
-        newScore = $('.NewPlayerScore');
+        let newScore = $('.NewPlayerScore');
         newScore.text(newval).show();
+        newScore.css({'top': '-290px', 'right': '-100px', 'font-size': '50px'});
         newScore.animate({
             right: "+=150", top: "+=300", fontSize: "20px"
         }, 1000);
@@ -419,7 +423,6 @@ $(document).ready(function () {
             setTimeout(function () {
                 newScore.hide();
                 iScore.text(newval + oldval);
-                newScore.css({'top': '-290px', 'right': '-100px', 'font-size': '50px'});
             }, 1000);
         }
 
