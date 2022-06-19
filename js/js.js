@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.64';
+    const gameVersion = 'v0.65';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -308,10 +308,17 @@ $(document).ready(function () {
 
                 if (vkInit) {
 
+                    vkBridge.send("VKWebAppStorageGet", {"keys": ["HCF_level"+gameLevel]})
+                        .then(result => {
+                            console.log('VKWebAppStorageGet', result)
+                        });
+
                     vkBridge.send("VKWebAppStorageSet", {
-                        key: gameLevel,
+                        key: 'HCF_level'+gameLevel,
                         value: sCount
-                    })
+                    }).then(result => {
+                        console.log('VKWebAppStorageSet', result)
+                    });
 
                     let gameResult = parseInt($('.playerScoreCounter').text());
 
