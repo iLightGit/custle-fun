@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.67';
+    const gameVersion = 'v0.68';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -308,19 +308,20 @@ $(document).ready(function () {
 
                 if (vkInit) {
 
-                    vkBridge.send("VKWebAppStorageGet", {"keys": ["HCF_level"+gameLevel]})
-                        .then(result => {
-                            console.log('VKWebAppStorageGet', result)
-                            console.log('VKWebAppStorageGet1',  result?.response[0]?.key)
-                            console.log('VKWebAppStorageGet2',  result?.response[0]?.value)
-                        }).finally(() => console.log("Промис VKWebAppStorageGet завершён"));
-
                     vkBridge.send("VKWebAppStorageSet", {
                         key: 'HCF_level'+gameLevel,
                         value: sCount
                     }).then(result => {
                         console.log('VKWebAppStorageSet', result)
                     }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
+
+                    vkBridge.send("VKWebAppStorageGet", {"keys": ["HCF_level"+gameLevel]})
+                        .then(result => {
+                            console.log('VKWebAppStorageGet', result);
+                            console.log('VKWebAppStorageGet1',  result?.keys[0]);
+                        }).finally(() => console.log("Промис VKWebAppStorageGet завершён"));
+
+
 
                     let gameResult = parseInt($('.playerScoreCounter').text());
 
