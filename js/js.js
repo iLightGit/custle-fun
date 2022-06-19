@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.68';
+    const gameVersion = 'v0.69';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -309,8 +309,8 @@ $(document).ready(function () {
                 if (vkInit) {
 
                     vkBridge.send("VKWebAppStorageSet", {
-                        key: 'HCF_level'+gameLevel,
-                        value: sCount
+                        key: 'HCF_level1',
+                        value: '123'
                     }).then(result => {
                         console.log('VKWebAppStorageSet', result)
                     }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
