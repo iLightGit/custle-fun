@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.71';
+    const gameVersion = 'v0.72';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -60,10 +60,10 @@ $(document).ready(function () {
 
         const  MSB = $('.js-mainStarBox')
 
+
         for(let i = 0; i < MSB.length; i++){
 
-
-            let storageKey = 'HCF_level_' + i+1;
+            let storageKey = 'HCF_level_' + (i+1);
             console.log('msb', storageKey)
 
             vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
