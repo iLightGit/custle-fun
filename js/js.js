@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.611';
+    const gameVersion = 'v0.612';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -307,19 +307,22 @@ $(document).ready(function () {
 
 
                 if (vkInit) {
-                    let storageKey = 'HCF_level'+gameLevel;
-                    vkBridge.send("VKWebAppStorageSet", {
-                        key: storageKey,
-                        value: 1
-                    }).then(result => {
-                        console.log('VKWebAppStorageSet', result)
-                    }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
+                    let storageKey = 'HCF_level_'+gameLevel;
 
                     vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
                         .then(result => {
-                            console.log('VKWebAppStorageGet', result);
-                            console.log('VKWebAppStorageGet1',  result?.keys[0]);
-                            console.log('VKWebAppStorageGet1',  result?.keys[0].value);
+                            // console.log('VKWebAppStorageGet', result);
+                            // console.log('VKWebAppStorageGet1',  result?.keys[0]);
+                            let storageValue = result?.keys[0].value;
+                            console.log('VKWebAppStorageGet1',  storageValue);
+                            if(storageValue === "" || parseInt(storageValue) < sCount ){
+                                vkBridge.send("VKWebAppStorageSet", {
+                                    key: ''+storageKey,
+                                    value: ''+sCount
+                                }).then(result => {
+                                    console.log('VKWebAppStorageSet', result)
+                                }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
+                            }
                         }).finally(() => console.log("Промис VKWebAppStorageGet завершён"));
 
 
