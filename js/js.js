@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.7';
+    const gameVersion = 'v0.71';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -61,13 +61,16 @@ $(document).ready(function () {
         const  MSB = $('.js-mainStarBox')
 
         for(let i = 0; i < MSB.length; i++){
-            console.log('msb', i)
+
 
             let storageKey = 'HCF_level_' + i+1;
+            console.log('msb', storageKey)
 
             vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
                 .then(result => {
                     let storageValue = result?.keys[0].value;
+
+                    console.log('VKWebAppStorageGet0', result);
                     console.log('VKWebAppStorageGet1', storageValue);
 
                     if (storageValue !== "") {
@@ -312,7 +315,7 @@ $(document).ready(function () {
 
                 console.log(999, sCount, mainStarBoxDataStar, 999, mainStarBox.find('.menuStar'));
 
-                if (sCount > mainStarBoxDataStar) {
+                if (!vkInit && sCount > mainStarBoxDataStar) {
                     addStarFN(mainStarBox.find('.menuStar'), sCount);
                     mainStarBox.data('star', sCount)
                 }
