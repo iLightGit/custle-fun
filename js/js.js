@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.612';
+    const gameVersion = 'v0.7';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -57,6 +57,35 @@ $(document).ready(function () {
     if (typeof m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined') {
 
         vkInit = true;
+
+        const  MSB = $('.js-mainStarBox')
+
+        for(let i = 0; i < MSB.length; i++){
+            console.log('msb', i)
+
+            let storageKey = 'HCF_level_' + i+1;
+
+            vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
+                .then(result => {
+                    let storageValue = result?.keys[0].value;
+                    console.log('VKWebAppStorageGet1', storageValue);
+
+                    if (storageValue !== "") {
+                        storageValue = parseInt(storageValue);
+                        if (storageValue === 1 || storageValue === 2 || storageValue === 3){
+                            MSB.eq(i).addClass('menuLevel_open menuLevel_complete');
+                            addStarFN(MSB.eq(i), storageValue);
+                        } else {
+                            console.log('storageValue error', storageValue);
+                        }
+                    }
+
+
+                }).finally(() => console.log("Промис Start VKWebAppStorageGet завершён"));
+
+        }
+
+
 
         // !!!!!! Для тестов только на странице Сергей Ясвет
         if (m_urlvars.viewer_id === '85182172') { // Этот код выполнится только для меня
@@ -284,17 +313,13 @@ $(document).ready(function () {
                 console.log(999, sCount, mainStarBoxDataStar, 999, mainStarBox.find('.menuStar'));
 
                 if (sCount > mainStarBoxDataStar) {
-                    addStarFN(mainStarBox.find('.menuStar'));
+                    addStarFN(mainStarBox.find('.menuStar'), sCount);
                     mainStarBox.data('star', sCount)
                 }
 
-                addStarFN($('.js-menuOneLevelBox .menuStar'));
+                addStarFN($('.js-menuOneLevelBox .menuStar'), sCount);
 
-                function addStarFN(el) {
-                    for (let i = 0; i < sCount; i++) {
-                        el.eq(i).addClass('active');
-                    }
-                }
+
 
 
                 // Вынести в событие
@@ -307,24 +332,24 @@ $(document).ready(function () {
 
 
                 if (vkInit) {
-                    let storageKey = 'HCF_level_'+gameLevel;
+
+                    // + Запись звезд в StorageVK
+                    let storageKey = 'HCF_level_' + gameLevel;
 
                     vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
                         .then(result => {
-                            // console.log('VKWebAppStorageGet', result);
-                            // console.log('VKWebAppStorageGet1',  result?.keys[0]);
                             let storageValue = result?.keys[0].value;
-                            console.log('VKWebAppStorageGet1',  storageValue);
-                            if(storageValue === "" || parseInt(storageValue) < sCount ){
+                            console.log('VKWebAppStorageGet1', storageValue);
+                            if (storageValue === "" || parseInt(storageValue) < sCount) {
                                 vkBridge.send("VKWebAppStorageSet", {
-                                    key: ''+storageKey,
-                                    value: ''+sCount
+                                    key: '' + storageKey,
+                                    value: '' + sCount
                                 }).then(result => {
                                     console.log('VKWebAppStorageSet', result)
                                 }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
                             }
                         }).finally(() => console.log("Промис VKWebAppStorageGet завершён"));
-
+                    // - Запись звезд в StorageVK
 
 
                     let gameResult = parseInt($('.playerScoreCounter').text());
@@ -360,6 +385,13 @@ $(document).ready(function () {
                 //     }).catch(error => console.log(error));
             }, 1050);
 
+        }
+    }
+
+    // Добавление звезд
+    function addStarFN(el, sCount) {
+        for (let i = 0; i < sCount; i++) {
+            el.eq(i).addClass('active');
         }
     }
 
