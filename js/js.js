@@ -77,6 +77,7 @@ $(document).ready(function () {
                         storageValue = parseInt(storageValue);
                         if (storageValue === 1 || storageValue === 2 || storageValue === 3) {
                             MSB.eq(i).addClass('menuLevel_complete');
+                            MSB.eq(i).data('star', storageValue);
                             MSB.eq(i + 1).addClass('menuLevel_open');
                             addStarFN(MSB.eq(i).find('.menuStar'), storageValue);
                         } else {
@@ -315,7 +316,7 @@ $(document).ready(function () {
 
                 console.log(999, sCount, mainStarBoxDataStar, 999, mainStarBox.find('.menuStar'));
 
-                if (!vkInit && sCount > mainStarBoxDataStar) {
+                if (sCount > mainStarBoxDataStar) {
                     addStarFN(mainStarBox.find('.menuStar'), sCount);
                     mainStarBox.data('star', sCount)
                 }
