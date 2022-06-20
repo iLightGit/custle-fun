@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.72';
+    const gameVersion = 'v0.73';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -58,12 +58,12 @@ $(document).ready(function () {
 
         vkInit = true;
 
-        const  MSB = $('.js-mainStarBox')
+        const MSB = $('.js-mainStarBox')
 
 
-        for(let i = 0; i < MSB.length; i++){
+        for (let i = 0; i < MSB.length; i++) {
 
-            let storageKey = 'HCF_level_' + (i+1);
+            let storageKey = 'HCF_level_' + (i + 1);
             console.log('msb', storageKey)
 
             vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
@@ -75,9 +75,9 @@ $(document).ready(function () {
 
                     if (storageValue !== "") {
                         storageValue = parseInt(storageValue);
-                        if (storageValue === 1 || storageValue === 2 || storageValue === 3){
+                        if (storageValue === 1 || storageValue === 2 || storageValue === 3) {
                             MSB.eq(i).addClass('menuLevel_open menuLevel_complete');
-                            addStarFN(MSB.eq(i), storageValue);
+                            addStarFN(MSB.eq(i).find('.menuStar'), storageValue);
                         } else {
                             console.log('storageValue error', storageValue);
                         }
@@ -87,7 +87,6 @@ $(document).ready(function () {
                 }).finally(() => console.log("Промис Start VKWebAppStorageGet завершён"));
 
         }
-
 
 
         // !!!!!! Для тестов только на странице Сергей Ясвет
@@ -321,8 +320,6 @@ $(document).ready(function () {
                 }
 
                 addStarFN($('.js-menuOneLevelBox .menuStar'), sCount);
-
-
 
 
                 // Вынести в событие
