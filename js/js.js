@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.73';
+    const gameVersion = 'v0.74';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -76,7 +76,8 @@ $(document).ready(function () {
                     if (storageValue !== "") {
                         storageValue = parseInt(storageValue);
                         if (storageValue === 1 || storageValue === 2 || storageValue === 3) {
-                            MSB.eq(i).addClass('menuLevel_open menuLevel_complete');
+                            MSB.eq(i).addClass('menuLevel_complete');
+                            MSB.eq(i + 1).addClass('menuLevel_open');
                             addStarFN(MSB.eq(i).find('.menuStar'), storageValue);
                         } else {
                             console.log('storageValue error', storageValue);
