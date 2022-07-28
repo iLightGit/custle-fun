@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.75';
+    const gameVersion = 'v0.8';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -22,39 +22,25 @@ $(document).ready(function () {
         [220, 180]
     ];
 
-    console.log(gameVersion);
-
-    // console.log('request №1');
-    // var request = new XMLHttpRequest();
-    // var requestURL = 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids=85182172';
-    // request.open('GET', requestURL, true);
-    // request.responseType = 'jsonp';
-    // request.withCredentials = true;
-    // request.send();
-    // request.onload = function() {
-    //     var vkAPIresponse = request.response;
-    //     console.log(777,vkAPIresponse);
-    // }
-
     console.log('request №1');
 
     const m_httpVars = window.location.search.substring(1).split("&");
-    const m_urlvars = {};
+    const m_urlVars = {};
     let i;
     for (i in m_httpVars) {
         const s = String(m_httpVars[i]).split("=");
         const key = String(s[0]);
-        m_urlvars[key] = String(s[1]);
+        m_urlVars[key] = String(s[1]);
     }
 
     console.log('m_httpVars', m_httpVars);
-    console.log('m_urlvars', m_urlvars);
-    console.log('typeof  viewer_id:', typeof m_urlvars.viewer_id, typeof m_urlvars.access_token);
+    console.log('m_urlVars', m_urlVars);
+    console.log('typeof  viewer_id:', typeof m_urlVars.viewer_id, typeof m_urlVars.access_token);
 
     const serv_key = 'e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e';
     // TODO если делать монетизацию - перегенерировать, и положить на сервер
 
-    if (typeof m_urlvars.viewer_id !== 'undefined' && typeof m_urlvars.access_token !== 'undefined') {
+    if (typeof m_urlVars.viewer_id !== 'undefined' && typeof m_urlVars.access_token !== 'undefined') {
 
         vkInit = true;
 
@@ -92,9 +78,9 @@ $(document).ready(function () {
 
 
         // !!!!!! Для тестов только на странице Сергей Ясвет
-        if (m_urlvars.viewer_id === '85182172') { // Этот код выполнится только для меня
+        if (m_urlVars.viewer_id === '85182172') { // Этот код выполнится только для меня
 
-            console.log(555, m_urlvars.viewer_id, serv_key);
+            console.log(555, m_urlVars.viewer_id, serv_key);
 
             //Получаем токен приложения
             vkBridge.send("VKWebAppGetAuthToken", {
@@ -109,7 +95,7 @@ $(document).ready(function () {
                         "method": "secure.addAppEvent",
                         "request_id": gameVersion,
                         "params": {
-                            "user_id": m_urlvars.viewer_id,
+                            "user_id": m_urlVars.viewer_id,
                             "v": "5.5131",
                             "access_token": serv_key,
                             "value": "83",
@@ -125,7 +111,7 @@ $(document).ready(function () {
                         /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
                         url: 'https://api.vk.com/method/secure.addAppEvent?' +
                             'v=5.5131' +
-                            '&user_id=' + m_urlvars.viewer_id +
+                            '&user_id=' + m_urlVars.viewer_id +
                             '&activity_id=1' +
                             '&value=83' +
                             '&access_token=' + serv_key,
@@ -141,25 +127,14 @@ $(document).ready(function () {
         }  // !!!!!! Для тестов только на странице Сергей Ясвет
 
 
-        // $.ajax({
-        //     /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-        //     url: 'https://api.vk.com/method/secure.getUserLevel?v=5.5131&user_ids='+m_urlvars.viewer_id+'&access_token='+serv_key,
-        //     type: 'GET',
-        //     dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
-        //     crossDomain: true,
-        //     success: function(data){
-        //         console.log(888, data);
-        //     }
-        // })
-
     }
 
 
-    function VKajaxFN(url) {
+    function vkAjaxFN(url) {
         return new Promise((succeed, fail) => {
             $.ajax({
                 /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-                url: 'https://api.vk.com/method/' + url + m_urlvars.viewer_id + '&v=5.5131&access_token=' + serv_key,
+                url: 'https://api.vk.com/method/' + url + m_urlVars.viewer_id + '&v=5.5131&access_token=' + serv_key,
                 type: 'GET',
                 dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
                 crossDomain: true,
@@ -174,9 +149,7 @@ $(document).ready(function () {
         })
     }
 
-    let m = [],
-        n = [],
-        box = $('.m_content ul'), boxLi;
+    let box = $('.m_content ul'), boxLi;
     const position_1 = ['top', 'center', 'bottom'];
     const position_2 = ['right', 'center', 'left'];
 
@@ -189,22 +162,21 @@ $(document).ready(function () {
 
         gameLevel = parseInt(level);
         box.html('');
-        m = [];
+        let m = [];
         let number = areaX * areaY;
         for (i = 0; i < number / 2; i++) {
-            n = m.push(i + 1);
-            n = m.push(i + 1);
+            m.push(i + 1);
+            m.push(i + 1);
         }
 
-        let newcount = number - 2;
-        let newMass = [];
-
+        let newCount = number - 2;
+        
         for (let i = 0; i < number; i++) {
-            let m1 = m, rand = Math.floor((Math.random() * newcount) + 1), removed = m1.splice(rand, 1);
-            n = m1.push(m1.shift());
-            n = newMass.push(removed[0]);
+            let m1 = m, rand = Math.floor((Math.random() * newCount) + 1), removed = m1.splice(rand, 1);
+            m.push(m.shift());
+
             box.append('<li><div class="li"><div class="bg"></div><div class="block" style="background-image: url(' + imgDir + removed[0] + imgExt + ')">' + removed[0] + '</div></div></li>');
-            newcount--;
+            newCount--;
         }
 
         boxLi = $('.m_content li');
@@ -267,11 +239,11 @@ $(document).ready(function () {
         setTimeout(function () {
             $('.li.first, .li.last').removeClass('active first last');
         }, 600);
-        checkCompleate();
+        checkComplete();
     }
 
     // Проверка на завершение игры
-    function checkCompleate() {
+    function checkComplete() {
         if (($('.li.clear').size() === $('.li').size())) {
 
             setTimeout(function () {
@@ -357,7 +329,7 @@ $(document).ready(function () {
                     let gameResult = parseInt($('.playerScoreCounter').text());
 
                     // используем уровни для очков, т.к. очки нифига не работают
-                    VKajaxFN('secure.getUserLevel?user_ids=')
+                    vkAjaxFN('secure.getUserLevel?user_ids=')
                         .finally(() => console.log("Промис завершён"))
                         .then(result => {
 
@@ -368,7 +340,7 @@ $(document).ready(function () {
                             console.log('оно работает???', gameResult);
                             if (gameResult > 100) {
                                 if (gameResult > gameMaxPoints) {
-                                    VKajaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
+                                    vkAjaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
                                     alert('Ура, новый личный рекорд! ' + gameResult);
                                 } else {
                                     $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
@@ -400,18 +372,18 @@ $(document).ready(function () {
     // Анимированное отрытие всего поля
     function viewElements() {
         $('.m_content').addClass('locked');
-        isize = $('.m_content li').size();
-
+        
+        let iSize = $('.m_content li').size();
         let i = 0;
 
 
-        let viewElementsIntervel = setInterval(function () {
+        let viewElementsInterval = setInterval(function () {
 
             asd(i);
             i++
 
-            if (i > isize) {
-                clearInterval(viewElementsIntervel);
+            if (i > iSize) {
+                clearInterval(viewElementsInterval);
                 setTimeout(function () {
                     $('.m_content').removeClass('locked');
                 }, 400)
@@ -432,25 +404,25 @@ $(document).ready(function () {
     // function viewElements() {
     //
     //     $('.counter ').append('<span class="timer"></span>');
-    //     isize = boxLi.size();
+    //     iSize = boxLi.size();
     //     var i = 0;
     //
-    //     function showallel() {
-    //         showelem = setTimeout(function () {
-    //             showel(i);
+    //     function showAllEl() {
+    //         showElem = setTimeout(function () {
+    //             showEl(i);
     //             i++;
     //
     //             setTimeout(function () {
-    //                 showallel();
+    //                 showAllEl();
     //             }, 100);
     //         }, 200);
     //     }
     //
-    //     showallel();
+    //     showAllEl();
     //
     // }
 
-    // function showel(i) {
+    // function showEl(i) {
     //     boxLi.eq(i).find('.li').addClass('showElement');
     //     setTimeout(function () {
     //         boxLi.eq(i).find('.li').removeClass('showElement');
@@ -459,15 +431,12 @@ $(document).ready(function () {
 
 
     function getScore() {
-        iScore = $('.playerScoreCounter');
-        // bonusVal = parseInt(el.find('.block').text()); // Очки каждой клетки
-        bonusScore = parseInt($('.bonusScoreCounter').text());
+        let iScore = $('.playerScoreCounter');
+        let newVal = parseInt($('.bonusScoreCounter').text());
 
-        newval = bonusScore;
-
-        oldval = parseInt(iScore.text());
+        let oldVal = parseInt(iScore.text());
         let newScore = $('.NewPlayerScore');
-        newScore.text(newval).show();
+        newScore.text(newVal).show();
         newScore.css({'top': '-290px', 'right': '-100px', 'font-size': '50px'});
         newScore.animate({
             right: "+=150", top: "+=300", fontSize: "20px"
@@ -476,7 +445,7 @@ $(document).ready(function () {
         if (parseInt($('.bonusScoreCounter').text()) > 0) {
             setTimeout(function () {
                 newScore.hide();
-                iScore.text(newval + oldval);
+                iScore.text(newVal + oldVal);
             }, 1000);
         }
 
