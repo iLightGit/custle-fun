@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.74';
+    const gameVersion = 'v0.75';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -324,14 +324,14 @@ $(document).ready(function () {
                 addStarFN($('.js-menuOneLevelBox .menuStar'), sCount);
 
 
-                // Вынести в событие
+                // Вынести в событие ???
                 // Ипользуется только для мобилок
-                // Выводить только для первого раза или при установлении рекорда
-                // vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result:parseInt($('.playerScoreCounter').text())})
-                //     .then(data => console.log(data.success))
-                //     .catch(error => console.log(error));
-                console.log('end game 123');
-
+                // Выводим, если больше 7 очков (не для 1 уровня)
+                if (sScore > 7) {
+                    vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: sScore})
+                        .then(data => console.log(data.success))
+                        .catch(error => console.log(error));
+                }
 
                 if (vkInit) {
 
