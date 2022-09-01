@@ -307,7 +307,8 @@ table {
     position: relative;
     line-height: 20px;
 }
-.playerScoreFill{
+
+.playerScoreFill {
     padding: 20px 35px;
 }
 
@@ -337,9 +338,18 @@ table {
     box-shadow: 0 0 0 4px #fff, 0 0 0 7px #000;
 }
 
+.btnSmall.mod--deactivated {
+    opacity: .5;
+}
+
 .btnAddFriend {
     background-image: url(../img/btn/addFriend.png);
 }
+
+.btnSound {
+    background-image: url(../img/btn/sound.png);
+}
+
 /* - btnSmall*/
 
 .btnMenuContent {
@@ -351,14 +361,14 @@ table {
     z-index: 5;
 }
 
-.btnMenuBox:before{
+.btnMenuBox:before {
     content: "";
     position: absolute;
-    top:0;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     z-index: 1;
 }
 
@@ -392,7 +402,8 @@ body {
     width: 600px;
     margin: auto;
 }
-.menuLevel{
+
+.menuLevel {
     position: relative;
     cursor: pointer;
     width: 150px;
@@ -407,11 +418,11 @@ body {
     filter: grayscale(100%);
 }
 
-.menuLevel_open{
+.menuLevel_open {
     filter: grayscale(0);
 }
 
-.menuLevel_complete{
+.menuLevel_complete {
     filter: grayscale(0);
 }
 
@@ -422,32 +433,38 @@ body {
 .menuLevel_complete.menuLevel:before {
     content: "";
     position: absolute;
-    top:0;
+    top: 0;
     bottom: 0;
     right: 0;
     left: 0;
     z-index: 0;
-    background: rgba(0,0,0,0.15);
+    background: rgba(0, 0, 0, 0.15);
 }
 
 .menuLevel_1 {
     background-image: url("../img/bg/1.jpg");
 }
+
 .menuLevel_2 {
     background-image: url("../img/bg/2.jpg");
 }
+
 .menuLevel_3 {
     background-image: url("../img/bg/3.jpg");
 }
+
 .menuLevel_4 {
     background-image: url("../img/bg/4.jpg");
 }
+
 .menuLevel_5 {
     background-image: url("../img/bg/5.jpg");
 }
+
 .menuLevel_6 {
     background-image: url("../img/bg/6.jpg");
 }
+
 .menuStarBox {
     margin: 38px auto 0;
     text-align: center;
@@ -456,11 +473,11 @@ body {
 
 }
 
-.menuStarBox.mod--mainSB{
+.menuStarBox.mod--mainSB {
     opacity: 0;
 }
 
-.menuStar{
+.menuStar {
     filter: grayscale(100%);
     background: url("../img/menu/star.png") center border-box no-repeat transparent;
 
@@ -470,11 +487,11 @@ body {
     display: inline-block;
 }
 
-.btnMenuBox{
+.btnMenuBox {
     /*position: relative;*/
 }
 
-.btnMenuBox .menuStarBox{
+.btnMenuBox .menuStarBox {
     position: absolute;
     z-index: 10;
     display: block;

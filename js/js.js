@@ -3,16 +3,19 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.9';
+    const gameVersion = 'v0.91';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
 
     let vkInit = false;
+    let musicController = true;
+    let startMusicController = true;
 
     let gameLevel = 1;
     let dataSizeX = 2;
     let dataSizeY = 2;
+
     const starLegend = [
         [7, 5],
         [50, 40],
@@ -21,6 +24,16 @@ $(document).ready(function () {
         [180, 150],
         [220, 180]
     ];
+
+    const jsMusic = document.getElementById("js-main_music");
+
+    function playAudio() {
+        jsMusic.play();
+    }
+
+    function pauseAudio() {
+        jsMusic.pause();
+    }
 
     console.log('request №1');
 
@@ -194,18 +207,22 @@ $(document).ready(function () {
 
     $('.m_content ').on('click', '.li', function (e) {
         e.preventDefault();
+
+        musicPlay('./music/open_card.mp3')
+
         let el = $(this);
         parent = el.closest('.m_content');
         if (!(el.hasClass('clear'))) {
             if (!(parent.hasClass('locked'))) {
                 el.addClass('active');
                 if (boxLi.find('.active').size() === 2) {
-                    console.log('active 2');
+
                     parent.addClass('locked');
                     firstEL = $('.li.active:first');
                     lastEL = $('.li.active:last');
                     firstEL.addClass('first');
                     lastEL.addClass('last');
+
                     setTimeout(function () {
                         check(firstEL, lastEL);
 
@@ -235,6 +252,10 @@ $(document).ready(function () {
             if (parseInt($('.bonusScoreCounter').text()) > 0) {
                 getScore();
             }
+
+            musicPlay('./music/open_success.mp3');
+        } else {
+            musicPlay('./music/open_wrong.mp3');
         }
         setTimeout(function () {
             $('.li.first, .li.last').removeClass('active first last');
@@ -258,6 +279,8 @@ $(document).ready(function () {
                 $('body').find('.btnRestart').on('click', function () {
                     removeLevel();
                     start($(this).data('size-x'), $(this).data('size-y'), gameLevel);
+                    // musicPlay('./music/bnt_click.mp3');
+                    musicPlay('./music/level_new.mp3');
                 });
 
                 $('body').find('.btnHome').on('click', function () {
@@ -269,6 +292,8 @@ $(document).ready(function () {
                     $('.gameBox').hide();
                     removeLevel();
                     $('.js-menuMainLevelBox').show();
+                    // musicPlay('./music/bnt_click.mp3');
+                    musicPlay('./music/level_new.mp3');
                 });
 
 
@@ -279,8 +304,12 @@ $(document).ready(function () {
 
                 if (sScore >= stLegend[0]) { // 3 звезды
                     sCount = 3;
+                    musicPlay('./music/level_end_3.mp3');
                 } else if (sScore >= stLegend[1]) { // 2 звезды
                     sCount = 2;
+                    musicPlay('./music/level_end_2.mp3');
+                } else {
+                    musicPlay('./music/level_end_1.mp3');
                 }
 
                 let mainStarBox = $('.js-mainStarBox').eq(gameLevel - 1);
@@ -340,8 +369,11 @@ $(document).ready(function () {
                             console.log('оно работает???', gameResult);
                             if (gameResult > 100) {
                                 if (gameResult > gameMaxPoints) {
+                                    //На мобилке вызовет дополнительное окно
                                     vkAjaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
-                                    alert('Ура, новый личный рекорд! ' + gameResult);
+
+                                    //Алект имеет смысл, если не на мобилке
+                                    //alert('Ура, новый личный рекорд! ' + gameResult);
                                 } else {
                                     $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
                                 }
@@ -467,6 +499,12 @@ $(document).ready(function () {
         $('.playerScoreCounter').text(0);
     }
 
+    function musicPlay(musicFile){
+        if(musicController){
+            new Audio(musicFile).play()
+        }
+    }
+
     $('.menuLevel').on('click', function () {
         if ($(this).hasClass('menuLevel_open')) {
             dataSizeX = $(this).data('size-x');
@@ -477,6 +515,8 @@ $(document).ready(function () {
             $('.gameBox').show();
             $('.menuLevelBox').hide();
             start(dataSizeX, dataSizeY, gameLevel);
+
+            musicPlay('./music/level_new.mp3')
         }
     });
 
@@ -487,11 +527,31 @@ $(document).ready(function () {
             .catch(error => console.log(error));
     });
 
+    $('.js-btnSound').on('click', function () {
+        if(musicController){
+            musicController = false;
+            pauseAudio();
+            $(this).addClass('mod--deactivated');
+        } else {
+            $(this).removeClass('mod--deactivated');
+            musicController = true;
+            playAudio();
+        }
 
+    });
+
+    function startMusic(){
+        if(musicController && startMusicController){
+            startMusicController = false;
+            playAudio();
+        }
+    }
 
 
     $(window).load(function () {
         start(2, 2, 1);
+
+        document.onclick = startMusic;
     });
 
 });
