@@ -324,6 +324,24 @@ table {
     position: relative;
 }
 
+/* + btnSmall*/
+.btnSmall {
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+    background: url(../img/btn/addFriend.png) center border-box no-repeat white;
+    border-radius: 100%;
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    box-shadow: 0 0 0 4px #fff, 0 0 0 7px #000;
+}
+
+.btnAddFriend {
+    background-image: url(../img/btn/addFriend.png);
+}
+/* - btnSmall*/
+
 .btnMenuContent {
     position: absolute;
     bottom: 50px;

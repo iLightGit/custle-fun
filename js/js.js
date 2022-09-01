@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.8';
+    const gameVersion = 'v0.9';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -479,6 +479,15 @@ $(document).ready(function () {
             start(dataSizeX, dataSizeY, gameLevel);
         }
     });
+
+    //Пригласить друга
+    $('.js-inviteFriend').on('click', function () {
+        vkBridge.send("VKWebAppShowInviteBox", {})
+            .then(data => console.log(data.success))
+            .catch(error => console.log(error));
+    });
+
+
 
 
     $(window).load(function () {
