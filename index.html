@@ -3,14 +3,19 @@
 <head>
     <meta charset=utf-8>
     <title>Игра "Найди пару"</title>
-    <link href="css/css.css" rel="stylesheet" type="text/css" media="screen, projection" />
+    <link href="css/css.css" rel="stylesheet" type="text/css" media="screen, projection"/>
 </head>
 <body>
-    <table class="t1">
+<table class="t1">
 
-        <tr><td><!--content-->
-            <div class="btnSmall btnAddFriend js-inviteFriend"></div>
-            <div class="btnSmall btnSound js-btnSound"></div>
+    <tr>
+        <td><!--content-->
+            <div class="btnSmallContent">
+                <div class="btnSmall btnAddFriend js-inviteFriend"></div>
+                <div class="btnSmall btnSound js-btnSound"></div>
+                <div class="btnSmall btnHome btnSmallContent__btnHome js-btnHomeSmall"></div>
+            </div>
+
             <div class="m_content">
 
                 <audio id="js-main_music" class="js-main_music" src="music/main_bg.ogg" loop></audio>
@@ -25,7 +30,8 @@
 
 
                 <div class="menuLevelBox js-menuMainLevelBox" style="display: none">
-                    <div class="menuLevel js-mainStarBox menuLevel_1 menuLevel_open" data-size-x="2" data-size-y="2" data-star="0">
+                    <div class="menuLevel js-mainStarBox menuLevel_1 menuLevel_open" data-size-x="2" data-size-y="2"
+                         data-star="0">
                         <div class="menuStarBox mod--mainSB">
                             <span class="menuStar"></span>
                             <span class="menuStar"></span>
@@ -60,7 +66,7 @@
                             <span class="menuStar"></span>
                         </div>
                     </div>
-                    <div class="menuLevel js-mainStarBox menuLevel_6" data-size-x="8" data-size-y="5" data-star="0">
+                    <div class="menuLevel js-mainStarBox menuLevel_6" data-size-x="8" data-size-y="4" data-star="0">
                         <div class="menuStarBox mod--mainSB">
                             <span class="menuStar"></span>
                             <span class="menuStar"></span>
@@ -69,11 +75,12 @@
                     </div>
                 </div>
             </div>
-        </td></tr><!--/content-->
+        </td>
+    </tr><!--/content-->
 
-    </table>
-    <script type="text/javascript" src="js/bridge.min.js" ></script>
-    <script type="text/javascript" src="js/jquery.js" ></script>
-    <script type="text/javascript" src="js/js.js"></script>
+</table>
+<script type="text/javascript" src="js/bridge.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/js.js"></script>
 </body>
 </html>

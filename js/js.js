@@ -11,6 +11,7 @@ $(document).ready(function () {
     let vkInit = false;
     let musicController = true;
     let startMusicController = true;
+    let viewElementsInterval;
 
     let gameLevel = 1;
     let dataSizeX = 2;
@@ -284,7 +285,6 @@ $(document).ready(function () {
                 });
 
                 $('body').find('.btnHome').on('click', function () {
-                    console.log('возможно этот клик множится');
                     let completeLvl = $(this).data('level');
 
                     $('.menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
@@ -292,7 +292,7 @@ $(document).ready(function () {
                     $('.gameBox').hide();
                     removeLevel();
                     $('.js-menuMainLevelBox').show();
-                    // musicPlay('./music/bnt_click.mp3');
+                    $('.js-btnHomeSmall').hide();
                     musicPlay('./music/level_new.mp3');
                 });
 
@@ -403,13 +403,14 @@ $(document).ready(function () {
 
     // Анимированное отрытие всего поля
     function viewElements() {
+        clearInterval(viewElementsInterval);
         $('.m_content').addClass('locked');
         
         let iSize = $('.m_content li').size();
         let i = 0;
 
 
-        let viewElementsInterval = setInterval(function () {
+        viewElementsInterval = setInterval(function () {
 
             asd(i);
             i++
@@ -515,7 +516,7 @@ $(document).ready(function () {
             $('.gameBox').show();
             $('.menuLevelBox').hide();
             start(dataSizeX, dataSizeY, gameLevel);
-
+            $('.js-btnHomeSmall').show();
             musicPlay('./music/level_new.mp3')
         }
     });
@@ -547,6 +548,20 @@ $(document).ready(function () {
         }
     }
 
+
+    $(function() {
+        $(window).bind('focus', function() {
+            if(musicController){
+                playAudio();
+            }
+        });
+
+        $(window).bind('blur', function() {
+            if(musicController){
+                pauseAudio();
+            }
+        });
+    });
 
     $(window).load(function () {
         start(2, 2, 1);
