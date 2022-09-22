@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.13.5';
+    const gameVersion = 'v0.13.6';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -577,13 +577,14 @@ $(document).ready(function () {
             .then(result => {
                 let storageValue = result?.keys[0].value;
 
-                musicController = !!(storageValue || storageValue === "");
+                if (storageValue === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
+                    musicController = false;
+                    $('.js-btnSound').addClass('mod--deactivated');
+                }
 
                 console.log('VKWebAppStorageGet HCF_music', storageValue, result, musicController);
 
-                if(musicController === false){
-                    $('.js-btnSound').addClass('mod--deactivated');
-                }
+
             }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
 
 
