@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.13.4';
+    const gameVersion = 'v0.13.5';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -536,12 +536,12 @@ $(document).ready(function () {
             $(this).addClass('mod--deactivated');
             musicController = false;
             pauseAudio();
-            storageSetFN('HCF_music', '0')
+            storageSetFN('HCF_music', 0)
         } else {
             $(this).removeClass('mod--deactivated');
             musicController = true;
             playAudio();
-            storageSetFN('HCF_music', '1')
+            storageSetFN('HCF_music', 1)
         }
 
     });
@@ -576,9 +576,12 @@ $(document).ready(function () {
         vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
             .then(result => {
                 let storageValue = result?.keys[0].value;
-                console.log('VKWebAppStorageGet HCF_music', storageValue, result);
+
                 musicController = !!(storageValue || storageValue === "");
-                if(!musicController){
+
+                console.log('VKWebAppStorageGet HCF_music', storageValue, result, musicController);
+
+                if(musicController === false){
                     $('.js-btnSound').addClass('mod--deactivated');
                 }
             }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
