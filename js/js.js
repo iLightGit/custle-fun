@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.11.0';
+    const gameVersion = 'v0.12.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -289,7 +289,7 @@ $(document).ready(function () {
 
                     $('.menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
                     $('.menuLevel').eq(completeLvl).addClass('menuLevel_open');
-                    $('.gameBox').hide();
+                    $('.js-gameBox').hide();
                     removeLevel();
                     $('.js-menuMainLevelBox').show();
                     $('.js-btnHomeSmall').hide();
@@ -485,7 +485,7 @@ $(document).ready(function () {
     }
 
     function addBonusPoints() {
-        $('.gameContainer').prepend('<div class="bonusScoreBox">' +
+        $('.btnSmallContent').after('<div class="bonusScoreBox">' +
                 '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div>' +
                 '<div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div>' +
             '</div>');
@@ -512,7 +512,7 @@ $(document).ready(function () {
 
             gameLevel = $(this).index() + 1;
 
-            $('.gameBox').show();
+            $('.js-gameBox').show();
             $('.menuLevelBox').hide();
             start(dataSizeX, dataSizeY, gameLevel);
             $('.js-btnHomeSmall').show();
