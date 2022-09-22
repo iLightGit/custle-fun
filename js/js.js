@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.12.0';
+    const gameVersion = 'v0.13.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -74,7 +74,7 @@ $(document).ready(function () {
                     console.log('VKWebAppStorageGet1', storageValue);
 
                     if (storageValue !== "") {
-                        storageValue = parseInt(storageValue);
+                        storageValue = parseInt(storageValue); // удалить если после 0.14 ничего не отвалится
                         if (storageValue === 1 || storageValue === 2 || storageValue === 3) {
                             MSB.eq(i).addClass('menuLevel_complete');
                             MSB.eq(i).data('star', storageValue);
@@ -344,12 +344,7 @@ $(document).ready(function () {
                             let storageValue = result?.keys[0].value;
                             console.log('VKWebAppStorageGet1', storageValue);
                             if (storageValue === "" || parseInt(storageValue) < sCount) {
-                                vkBridge.send("VKWebAppStorageSet", {
-                                    key: '' + storageKey,
-                                    value: '' + sCount
-                                }).then(result => {
-                                    console.log('VKWebAppStorageSet', result)
-                                }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
+                                storageSetFN(storageKey, sCount)
                             }
                         }).finally(() => console.log("Промис VKWebAppStorageGet завершён"));
                     // - Запись звезд в StorageVK
@@ -392,6 +387,15 @@ $(document).ready(function () {
             }, 1050);
 
         }
+    }
+
+    function storageSetFN(storageKey, storageValue){
+        vkBridge.send("VKWebAppStorageSet", {
+            key: `${storageKey}`,
+            value: storageValue
+        }).then(result => {
+            console.log('VKWebAppStorageSet', result)
+        }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
     }
 
     // Добавление звезд
@@ -532,10 +536,12 @@ $(document).ready(function () {
             musicController = false;
             pauseAudio();
             $(this).addClass('mod--deactivated');
+            storageSetFN('HCF_music', 0)
         } else {
             $(this).removeClass('mod--deactivated');
             musicController = true;
             playAudio();
+            storageSetFN('HCF_music', 1)
         }
 
     });
@@ -564,6 +570,16 @@ $(document).ready(function () {
 
     $(window).load(function () {
         start(2, 2, 1);
+
+        // + Достать из StorageVK состояние музыки
+
+        vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
+            .then(result => {
+                let storageValue = result?.keys[0].value;
+                console.log('VKWebAppStorageGet HCF_music', storageValue);
+                musicController = !!(storageValue || storageValue === "");
+            }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
+
 
         document.onclick = startMusic;
     });
