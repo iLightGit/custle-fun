@@ -74,7 +74,7 @@ $(document).ready(function () {
                     console.log('VKWebAppStorageGet1', storageValue);
 
                     if (storageValue !== "") {
-                        storageValue = parseInt(storageValue); // удалить если после 0.14 ничего не отвалится
+                        storageValue = parseInt(storageValue);
                         if (storageValue === 1 || storageValue === 2 || storageValue === 3) {
                             MSB.eq(i).addClass('menuLevel_complete');
                             MSB.eq(i).data('star', storageValue);
@@ -391,8 +391,8 @@ $(document).ready(function () {
 
     function storageSetFN(storageKey, storageValue){
         vkBridge.send("VKWebAppStorageSet", {
-            key: `${storageKey}`,
-            value: storageValue
+            key: `${storageKey}`, // Должны быть строкой в любом случае
+            value: `${storageValue}` // Должны быть строкой в любом случае
         }).then(result => {
             console.log('VKWebAppStorageSet', result)
         }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
