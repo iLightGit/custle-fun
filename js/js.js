@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.13.2';
+    const gameVersion = 'v0.13.3';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -392,9 +392,9 @@ $(document).ready(function () {
     function storageSetFN(storageKey, storageValue){
         vkBridge.send("VKWebAppStorageSet", {
             key: `${storageKey}`, // Должны быть строкой в любом случае
-            value: `${storageValue}` // Должны быть строкой в любом случае
+            value: `${storageValue}`, // Должны быть строкой в любом случае
         }).then(result => {
-            console.log('VKWebAppStorageSet', result)
+            console.log('VKWebAppStorageSet', result, `${storageKey}`, `${storageValue}`, 123, storageKey, storageValue)
         }).finally(() => console.log("Промис VKWebAppStorageSet завершён"));
     }
 
