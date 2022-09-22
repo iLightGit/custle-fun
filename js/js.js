@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.13.0';
+    const gameVersion = 'v0.13.1';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
