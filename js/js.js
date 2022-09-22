@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.91';
+    const gameVersion = 'v0.11.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -485,12 +485,11 @@ $(document).ready(function () {
     }
 
     function addBonusPoints() {
-        $('.gameContainer').prepend('<div class="bonusScoreBox"><div class="bonusScore"><div class="bonusScoreFill">Бонусные ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div></div>');
+        $('.gameContainer').prepend('<div class="bonusScoreBox">' +
+                '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div>' +
+                '<div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div>' +
+            '</div>');
     }
-
-    (function addPlayerScore() {
-        $('.gameContainer').append('<div class="playerScoreBox"><div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div></div>');
-    }());
 
     $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
 
