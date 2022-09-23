@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.13.7';
+    const gameVersion = 'v0.13.8';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -568,11 +568,9 @@ $(document).ready(function () {
         });
     });
 
-    $(window).load(function () {
-        start(2, 2, 1);
+    $(document).ready(function () {
 
         // + Достать из StorageVK состояние музыки
-
         vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
             .then(result => {
                 let storageValue = result?.keys[0].value;
@@ -581,14 +579,17 @@ $(document).ready(function () {
                     musicController = false;
                     $('.js-btnSound').addClass('mod--deactivated');
                 }
-
                 console.log('VKWebAppStorageGet HCF_music', storageValue, result, musicController);
-
-
             }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
 
+    });
+
+    $(window).load(function () {
+
+        start(2, 2, 1);
 
         document.onclick = startMusic;
+
     });
 
 });
