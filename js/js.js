@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.13.8';
+    const gameVersion = 'v0.14.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -558,6 +558,8 @@ $(document).ready(function () {
         $(window).bind('focus', function() {
             if(musicController){
                 playAudio();
+                // 0.14.+
+                document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+2
             }
         });
 
@@ -566,6 +568,17 @@ $(document).ready(function () {
                 pauseAudio();
             }
         });
+
+        // 0.14.+
+        $(window).on('focus', (event) => {
+
+            document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+3
+        });
+
+        // document.body.addEventListener('focus', (event) => {
+        //     console.log('tasdest')
+        // });
+
     });
 
     $(document).ready(function () {
