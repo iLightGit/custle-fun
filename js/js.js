@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.14.2';
+    const gameVersion = 'v0.14.3';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -36,8 +36,6 @@ $(document).ready(function () {
         jsMusic.pause();
     }
 
-    console.log('request №1');
-
     const m_httpVars = window.location.search.substring(1).split("&");
     const m_urlVars = {};
     let i;
@@ -46,10 +44,6 @@ $(document).ready(function () {
         const key = String(s[0]);
         m_urlVars[key] = String(s[1]);
     }
-
-    console.log('m_httpVars', m_httpVars);
-    console.log('m_urlVars', m_urlVars);
-    console.log('typeof  viewer_id:', typeof m_urlVars.viewer_id, typeof m_urlVars.access_token);
 
     const serv_key = 'e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e';
     // TODO если делать монетизацию - перегенерировать, и положить на сервер
@@ -64,7 +58,6 @@ $(document).ready(function () {
         for (let i = 0; i < MSB.length; i++) {
 
             let storageKey = 'HCF_level_' + (i + 1);
-            console.log('msb', storageKey)
 
             vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
                 .then(result => {
@@ -184,7 +177,7 @@ $(document).ready(function () {
         }
 
         let newCount = number - 2;
-        
+
         for (let i = 0; i < number; i++) {
             let m1 = m, rand = Math.floor((Math.random() * newCount) + 1), removed = m1.splice(rand, 1);
             m.push(m.shift());
@@ -315,8 +308,6 @@ $(document).ready(function () {
                 let mainStarBox = $('.js-mainStarBox').eq(gameLevel - 1);
                 let mainStarBoxDataStar = mainStarBox.data('star');
 
-                console.log(999, sCount, mainStarBoxDataStar, 999, mainStarBox.find('.menuStar'));
-
                 if (sCount > mainStarBoxDataStar) {
                     addStarFN(mainStarBox.find('.menuStar'), sCount);
                     mainStarBox.data('star', sCount)
@@ -379,17 +370,12 @@ $(document).ready(function () {
 
                 }
 
-                // Получаем токен приложения
-                // vkBridge.send("VKWebAppGetAuthToken", {"app_id": 8158397, "scope": ""})
-                //     .then(data => {
-                //         console.log(data);
-                //     }).catch(error => console.log(error));
             }, 1050);
 
         }
     }
 
-    function storageSetFN(storageKey, storageValue){
+    function storageSetFN(storageKey, storageValue) {
         vkBridge.send("VKWebAppStorageSet", {
             key: `${storageKey}`, // Должны быть строкой в любом случае
             value: `${storageValue}`, // Должны быть строкой в любом случае
@@ -409,7 +395,7 @@ $(document).ready(function () {
     function viewElements() {
         clearInterval(viewElementsInterval);
         $('.m_content').addClass('locked');
-        
+
         let iSize = $('.m_content li').size();
         let i = 0;
 
@@ -490,8 +476,8 @@ $(document).ready(function () {
 
     function addBonusPoints() {
         $('.btnSmallContent').after('<div class="bonusScoreBox">' +
-                '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div>' +
-                '<div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div>' +
+            '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div>' +
+            '<div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div>' +
             '</div>');
     }
 
@@ -503,8 +489,8 @@ $(document).ready(function () {
         $('.playerScoreCounter').text(0);
     }
 
-    function musicPlay(musicFile){
-        if(musicController){
+    function musicPlay(musicFile) {
+        if (musicController) {
             new Audio(musicFile).play()
         }
     }
@@ -532,7 +518,7 @@ $(document).ready(function () {
     });
 
     $('.js-btnSound').on('click', function () {
-        if(musicController){
+        if (musicController) {
             $(this).addClass('mod--deactivated');
             musicController = false;
             pauseAudio();
@@ -546,54 +532,23 @@ $(document).ready(function () {
 
     });
 
-    function startMusic(){
-        if(musicController && startMusicController){
+    function startMusic() {
+        if (musicController && startMusicController) {
             startMusicController = false;
             playAudio();
         }
     }
 
 
-    $(function() {
-        // $(window).bind('focus', function() {
-        //     if(musicController){
-        //         playAudio();
-        //         // 0.14.+
-        //         // document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+2
-        //     }
-        // });
-        //
-        // $(window).bind('blur', function() {
-        //     if(musicController){
-        //         pauseAudio();
-        //     }
-        // });
-
-        // 0.14.+
-        // $(window).on('focus', (event) => {
-        //
-        //     document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+3
-        // });
-
-        // document.body.addEventListener('focus', (event) => {
-        //     console.log('tasdest')
-        // });
-
-    });
-
-
     document.addEventListener("visibilitychange", () => {
-        document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+document.visibilityState
-
-        if(musicController){
-            if(document.visibilityState === "visible"){
+        if (musicController) {
+            if (document.visibilityState === "visible") {
                 playAudio();
             } else {
                 pauseAudio();
             }
 
         }
-
     })
 
 
@@ -606,9 +561,7 @@ $(document).ready(function () {
                 musicController = false;
                 $('.js-btnSound').addClass('mod--deactivated');
             }
-            console.log('VKWebAppStorageGet HCF_music', storageValue, result, musicController);
         }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
-
 
 
     $(window).load(function () {
