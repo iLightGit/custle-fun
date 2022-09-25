@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.14.4';
+    const gameVersion = 'v0.14.5';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -200,45 +200,44 @@ $(document).ready(function () {
 
 
     $('.m_content ').on('click', '.li', function (e) {
+
         e.preventDefault();
-
-        musicPlay('./music/open_card.mp3')
-
         let el = $(this);
         parent = el.closest('.m_content');
-        if (!(el.hasClass('clear'))) {
-            if (!(parent.hasClass('locked'))) {
-                el.addClass('active');
-                if (boxLi.find('.active').size() === 2) {
 
-                    parent.addClass('locked');
-                    firstEL = $('.li.active:first');
-                    lastEL = $('.li.active:last');
-                    firstEL.addClass('first');
-                    lastEL.addClass('last');
+        if (!(parent.hasClass('locked')) && !(el.hasClass('clear')) && !el.hasClass('active')) {
+            el.addClass('active');
+            musicPlay('./music/open_card.mp3');
 
-                    setTimeout(function () {
-                        check(firstEL, lastEL);
+            if (boxLi.find('.active').size() === 2) {
 
-                        let bonusPoints = parseInt($('.bonusScoreCounter').text());
-                        if (bonusPoints) {
-                            $('.bonusScoreCounter').html(bonusPoints - 1);
-                        }
-                        parent.removeClass('locked');
+                parent.addClass('locked');
+                firstEL = $('.li.active:first');
+                lastEL = $('.li.active:last');
+                firstEL.addClass('first');
+                lastEL.addClass('last');
 
-                    }, 500);
+                setTimeout(function () {
+                    checkSame(firstEL, lastEL);
 
-                }
+                    let bonusPoints = parseInt($('.bonusScoreCounter').text());
+                    if (bonusPoints) {
+                        $('.bonusScoreCounter').html(bonusPoints - 1);
+                    }
+                    parent.removeClass('locked');
 
-                // Если открывалась 3-я, то закрывались 2 другие
-                if (boxLi.find('.active').size() === 3) {
-                    $('.li.first, .li.last').removeClass('active first last');
-                }
+                }, 500);
+
+            }
+
+            // Если открывалась 3-я, то закрывались 2 другие
+            if (boxLi.find('.active').size() === 3) {
+                $('.li.first, .li.last').removeClass('active first last');
             }
         }
     });
 
-    function check(firstEL, lastEL) {
+    function checkSame(firstEL, lastEL) {
         if (firstEL.text() === lastEL.text()) {
             $('.li.first, .li.last').addClass('clear').animate({
                 fontSize: "0em"
