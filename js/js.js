@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.14.1';
+    const gameVersion = 'v0.14.2';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -555,19 +555,19 @@ $(document).ready(function () {
 
 
     $(function() {
-        $(window).bind('focus', function() {
-            if(musicController){
-                playAudio();
-                // 0.14.+
-                // document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+2
-            }
-        });
-
-        $(window).bind('blur', function() {
-            if(musicController){
-                pauseAudio();
-            }
-        });
+        // $(window).bind('focus', function() {
+        //     if(musicController){
+        //         playAudio();
+        //         // 0.14.+
+        //         // document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+2
+        //     }
+        // });
+        //
+        // $(window).bind('blur', function() {
+        //     if(musicController){
+        //         pauseAudio();
+        //     }
+        // });
 
         // 0.14.+
         // $(window).on('focus', (event) => {
@@ -584,8 +584,16 @@ $(document).ready(function () {
 
     document.addEventListener("visibilitychange", () => {
         document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+document.visibilityState
-        console.log(document.visibilityState);
-        // Modify behavior…
+
+        if(musicController){
+            if(document.visibilityState === "visible"){
+                playAudio();
+            } else {
+                pauseAudio();
+            }
+
+        }
+
     })
 
 
