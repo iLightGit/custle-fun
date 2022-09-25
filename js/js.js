@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.14.3';
+    const gameVersion = 'v0.14.4';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -462,7 +462,7 @@ $(document).ready(function () {
         newScore.text(newVal).show();
         newScore.css({'top': '-290px', 'right': '-100px', 'font-size': '50px'});
         newScore.animate({
-            right: "+=150", top: "+=300", fontSize: "20px"
+            right: "+=115", top: "+=290", fontSize: "20px"
         }, 1000);
 
         if (parseInt($('.bonusScoreCounter').text()) > 0) {
