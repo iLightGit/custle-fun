@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.14.0';
+    const gameVersion = 'v0.14.1';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -559,7 +559,7 @@ $(document).ready(function () {
             if(musicController){
                 playAudio();
                 // 0.14.+
-                document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+2
+                // document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+2
             }
         });
 
@@ -570,10 +570,10 @@ $(document).ready(function () {
         });
 
         // 0.14.+
-        $(window).on('focus', (event) => {
-
-            document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+3
-        });
+        // $(window).on('focus', (event) => {
+        //
+        //     document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+3
+        // });
 
         // document.body.addEventListener('focus', (event) => {
         //     console.log('tasdest')
@@ -581,21 +581,27 @@ $(document).ready(function () {
 
     });
 
-    $(document).ready(function () {
 
-        // + Достать из StorageVK состояние музыки
-        vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
-            .then(result => {
-                let storageValue = result?.keys[0].value;
+    document.addEventListener("visibilitychange", () => {
+        document.getElementsByClassName('gameVersion')[0].textContent=document.getElementsByClassName('gameVersion')[0].textContent+document.visibilityState
+        console.log(document.visibilityState);
+        // Modify behavior…
+    })
 
-                if (storageValue === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
-                    musicController = false;
-                    $('.js-btnSound').addClass('mod--deactivated');
-                }
-                console.log('VKWebAppStorageGet HCF_music', storageValue, result, musicController);
-            }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
 
-    });
+    // + Достать из StorageVK состояние музыки
+    vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
+        .then(result => {
+            let storageValue = result?.keys[0].value;
+
+            if (storageValue === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
+                musicController = false;
+                $('.js-btnSound').addClass('mod--deactivated');
+            }
+            console.log('VKWebAppStorageGet HCF_music', storageValue, result, musicController);
+        }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
+
+
 
     $(window).load(function () {
 
