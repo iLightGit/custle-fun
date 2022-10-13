@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.2';
+    const gameVersion = 'v0.15.3';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -97,7 +97,7 @@ $(document).ready(function () {
             })
                 .then(data => {
                     console.log(777, data);
-                    // console.log(888, data?.keys[0].access_token);
+                    console.log(888, data['access_token']);
 
                     // vkBridge.send("VKWebAppCallAPIMethod", {
                     //     "method": "secure.addAppEvent",
@@ -120,7 +120,7 @@ $(document).ready(function () {
                         "params": {
                             "user_id": 643444,
                             "v": "5.131",
-                            "access_token": data?.keys[0].access_token,
+                            "access_token": data['access_token'],
                             "text": "тестовый запрос от HCF",
                             "name": "это тестовый запрос",
                             "type": "request",
