@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.14.5';
+    const gameVersion = 'v0.15.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -12,6 +12,7 @@ $(document).ready(function () {
     let musicController = true;
     let startMusicController = true;
     let viewElementsInterval;
+    let g_friend_stars = 0;
 
     let gameLevel = 1;
     let dataSizeX = 2;
@@ -92,26 +93,44 @@ $(document).ready(function () {
             //Получаем токен приложения
             vkBridge.send("VKWebAppGetAuthToken", {
                 "app_id": 8158397,
-                "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications"
+                "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications,notify,offline"
             })
                 .then(data => {
-                    console.log(777, data);
+                    console.log(777, data, data?.keys[0].access_token);
 
+
+                    // vkBridge.send("VKWebAppCallAPIMethod", {
+                    //     "method": "secure.addAppEvent",
+                    //     "request_id": gameVersion,
+                    //     "params": {
+                    //         "user_id": m_urlVars.viewer_id,
+                    //         "v": "5.5131",
+                    //         "access_token": serv_key,
+                    //         "value": "83",
+                    //         "activity_id": "2"
+                    //     }
+                    // })
+                    //     .then(data => {
+                    //         console.log(3333, data);
+                    //     }).catch(error => console.log(error));
 
                     vkBridge.send("VKWebAppCallAPIMethod", {
-                        "method": "secure.addAppEvent",
+                        "method": "apps.sendRequest",
                         "request_id": gameVersion,
                         "params": {
-                            "user_id": m_urlVars.viewer_id,
-                            "v": "5.5131",
-                            "access_token": serv_key,
-                            "value": "83",
-                            "activity_id": "2"
+                            "user_id": 643444,
+                            "v": "5.131",
+                            "access_token": data?.keys[0].access_token,
+                            "text": "тестовый запрос от HCF",
+                            "name": "это тестовый запрос",
+                            "type": "request",
+                            "key": "Строка, которая будет возвращена назад при переходе пользователя по запросу в приложение. Может использоваться для подсчета конверсии."
                         }
                     })
                         .then(data => {
                             console.log(3333, data);
                         }).catch(error => console.log(error));
+
 
 
                     $.ajax({
@@ -133,7 +152,7 @@ $(document).ready(function () {
                 }).catch(error => console.log(error));
         }  // !!!!!! Для тестов только на странице Сергей Ясвет
 
-
+        vk1.a.DZtLSunp4iEWdcscbslVrDNxPo0oBTsn5YdXhRN5sj1uVAhOz5_tfozE16HwFz3s2dwQ53s0f5WJ_Z3P76zT0iF5qf4-yekDEmoMYgRHfMqOeaQnJaJ1TxeLNzHBWzBBFKaRsuiH2uC24xMuIqOcgngk8or-H9IHOC5N4gbQFZcrSwnJIpFHQ2vsl8x9LdgF
     }
 
 
@@ -267,7 +286,10 @@ $(document).ready(function () {
                     opacity: 0
                 }, 700);
 
-                $('body').append('<div class="btnMenuBox"><div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div><div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div><div class="btnMenu btnHome" data-level="' + gameLevel + '"></div></div></div>');
+                $('body').append('<div class="btnMenuBox">' +
+                    '<div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div>' +
+                    '<div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div>' +
+                    '<div class="btnMenu btnHome" data-level="' + gameLevel + '"></div></div></div>');
 
                 $('body').find('.btnRestart').on('click', function () {
                     removeLevel();
@@ -554,14 +576,55 @@ $(document).ready(function () {
     // + Достать из StorageVK состояние музыки
     vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
         .then(result => {
-            let storageValue = result?.keys[0].value;
-
-            if (storageValue === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
+            if (result?.keys[0].value === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
                 musicController = false;
                 $('.js-btnSound').addClass('mod--deactivated');
             }
         }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
 
+
+    // + Достать бонусные звезды (полученные от друзей)
+    vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_friend_stars']})
+        .then(result => {
+            if (result?.keys[0].value !== "") {
+                g_friend_stars = parseInt(result?.keys[0].value);
+            }
+        }).finally(() => console.log("Промис VKWebAppStorageGet HCF_friend_stars завершён"));
+
+
+
+    $('.js-galleryItem').on('click', function () {
+        if ($(this).hasClass('galleryItem_open') && !$(this).hasClass('galleryItem_active')) {
+            $('.galleryItem_active').removeClass('galleryItem_active');
+            $(this).addClass('galleryItem_active');
+            $('body').attr('data-bg', $(this).find('.galleryItem__cont').data('bg'));
+        }
+    });
+
+    $('.js-btnGallery').on('click', function () {
+
+        FN_check_gallery();
+    });
+
+    FN_check_gallery(); //удалить
+
+    function FN_check_gallery(){
+        let item = $('.js-galleryItem[data-star]');
+        let stars = $('.menuStar').length + g_friend_stars;
+
+        stars = 7; // + должно браться и стора (то что поделились друзья)
+
+        for(i=0; i<item.length; i++){
+            let needStar = parseInt(item.eq(i).attr('data-star'));
+
+            if(needStar <= stars){
+                item.eq(i).addClass('galleryItem_open')
+            } else {
+                console.log(needStar, stars);
+                item.eq(i).append('<div class="galleryNeed">Нужно ' + (needStar - stars) +'<span class="galleryStar"></span></div>');
+            }
+        }
+    }
 
     $(window).load(function () {
 

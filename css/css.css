@@ -328,7 +328,7 @@ table {
     display: none;
 }
 
-.gameBox  {
+.gameBox {
     position: relative;
     height: calc(100% - 100px);
     margin-top: 32px;
@@ -418,8 +418,9 @@ table {
     background-image: url("../img/btn/home.png");
 }
 
-body {
-    background: url("../img/bg/0.png") center;
+.btnGallery {
+    background-image: url("../img/btn/gallery.png");
+    float: right;
 }
 
 /* MENU */
@@ -431,7 +432,6 @@ body {
 
 .menuLevel {
     position: relative;
-    cursor: pointer;
     width: 150px;
     height: 100px;
     background-position: center;
@@ -446,10 +446,12 @@ body {
 
 .menuLevel_open {
     filter: grayscale(0);
+    cursor: pointer;
 }
 
 .menuLevel_complete {
     filter: grayscale(0);
+    cursor: pointer;
 }
 
 .menuLevel_complete .menuStarBox.mod--mainSB {
@@ -540,3 +542,135 @@ body {
 /* MENU */
 
 
+/* GALLERY */
+
+.galleryBox {
+    text-align: left;
+    padding-left: 30px;
+    width: 600px;
+    margin: auto;
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.galleryItem {
+    position: relative;
+    width: 530px;
+    height: 100px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+
+    display: inline-block;
+    margin: 12px 10px;
+
+    text-align: center;
+
+}
+
+
+.galleryItem__cont{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 5px;
+    box-shadow: 0 0 0 5px #000, 0 0 0 3px #fff inset;
+    filter: grayscale(100%);
+}
+
+.galleryItem:before {
+    content: "";
+    position: absolute;
+    z-index: 10;
+    top:0;
+    bottom: 0;
+    left: -52px;
+    background: url(../img/gallery/lock.png) center no-repeat;
+    filter: grayscale(100%);
+    width: 100px;
+    background-size: 60px;
+}
+
+.galleryItem_open.galleryItem:before{
+    background: none;
+}
+
+.galleryItem_active.galleryItem:before{
+    background: url(../img/gallery/verified.png) center no-repeat;
+    background-size: 100px;
+    filter: grayscale(0);
+}
+
+.galleryItem_open, .galleryItem_open [data-bg] {
+    filter: grayscale(0);
+    cursor: pointer;
+}
+
+
+.galleryNeed{
+    text-shadow: 1px 0 5px #fff, 0 0 21px #fff;
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    height: 100px;
+    line-height: 100px;
+    z-index: 5;
+    background: #ffffffbf;
+    width: 200px;
+    float: right;
+    border-radius: 5px;
+}
+
+.galleryStar {
+    vertical-align: middle;
+    background: url(../img/menu/star.png) center border-box no-repeat transparent;
+    background-size: 50px;
+    width: 36px;
+    height: 28px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: -2px;
+}
+
+/* GALLERY */
+
+/* BG */
+
+[data-bg] {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+[data-bg="1"] {
+    background: url(../img/bg/0.png) center;
+}
+
+[data-bg="2"] {
+    background-image: url(../img/bg/1.jpg);
+}
+
+[data-bg="3"]{
+    background-image: url(../img/bg/2.jpg);
+}
+
+[data-bg="4"]{
+    background-image: url(../img/bg/3.jpg);
+}
+[data-bg="5"]{
+    background-image: url(../img/bg/4.jpg);
+}
+[data-bg="6"]{
+    background-image: url(../img/bg/5.jpg);
+}
+[data-bg="7"]{
+    background-image: url(../img/bg/6.jpg);
+}
+
+
+/* BG */
