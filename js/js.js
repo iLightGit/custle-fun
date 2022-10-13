@@ -152,7 +152,6 @@ $(document).ready(function () {
                 }).catch(error => console.log(error));
         }  // !!!!!! Для тестов только на странице Сергей Ясвет
 
-        vk1.a.DZtLSunp4iEWdcscbslVrDNxPo0oBTsn5YdXhRN5sj1uVAhOz5_tfozE16HwFz3s2dwQ53s0f5WJ_Z3P76zT0iF5qf4-yekDEmoMYgRHfMqOeaQnJaJ1TxeLNzHBWzBBFKaRsuiH2uC24xMuIqOcgngk8or-H9IHOC5N4gbQFZcrSwnJIpFHQ2vsl8x9LdgF
     }
 
 
