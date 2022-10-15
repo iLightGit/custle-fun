@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.5';
+    const gameVersion = 'v0.15.6';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -97,7 +97,7 @@ $(document).ready(function () {
             })
                 .then(data => {
                     console.log(777, data);
-                    console.log(888, data['access_token']);
+                    console.log(789, data['access_token']);
 
                     // vkBridge.send("VKWebAppCallAPIMethod", {
                     //     "method": "secure.addAppEvent",
@@ -133,21 +133,21 @@ $(document).ready(function () {
 
 
 
-                    $.ajax({
-                        /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
-                        url: 'https://api.vk.com/method/secure.addAppEvent?' +
-                            'v=5.5131' +
-                            '&user_id=' + m_urlVars.viewer_id +
-                            '&activity_id=1' +
-                            '&value=83' +
-                            '&access_token=' + serv_key,
-                        type: 'GET',
-                        dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
-                        crossDomain: true,
-                        success: function (data) {
-                            console.log(888, data);
-                        }
-                    })
+                    // $.ajax({
+                    //     /* TODO Этот запрос нужно делать на сервере, на котором должен храниться Сервисный ключ доступа */
+                    //     url: 'https://api.vk.com/method/secure.addAppEvent?' +
+                    //         'v=5.5131' +
+                    //         '&user_id=' + m_urlVars.viewer_id +
+                    //         '&activity_id=1' +
+                    //         '&value=83' +
+                    //         '&access_token=' + serv_key,
+                    //     type: 'GET',
+                    //     dataType: 'jsonp', //чтобы небыло проблем с крос-доменами необходим jsonp
+                    //     crossDomain: true,
+                    //     success: function (data) {
+                    //         console.log(888, data);
+                    //     }
+                    // })
 
                 }).catch(error => console.log(error));
         }  // !!!!!! Для тестов только на странице Сергей Ясвет
