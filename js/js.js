@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.7';
+    const gameVersion = 'v0.15.8';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -113,6 +113,22 @@ $(document).ready(function () {
                     //     .then(data => {
                     //         console.log(3333, data);
                     //     }).catch(error => console.log(error));
+
+                    $('.share').on('click', function(){
+                        vkBridge.send("VKWebAppCallAPIMethod", {
+                            "method": "wall.post",
+                            "request_id": gameVersion,
+                            "params": {
+
+                                "v": "5.131",
+                                "access_token": data['access_token'],
+                                "message": "Эта игра просто божественна!"
+                            }
+                        }).then(data => {
+                            console.log(4444, data);
+                        }).catch(error => console.log(error));
+                    });
+
 
                     $('.gameVersion').on('click', function(){
                         console.log('gameVersion click');
