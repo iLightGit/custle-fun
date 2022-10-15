@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.4';
+    const gameVersion = 'v0.15.5';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -93,7 +93,7 @@ $(document).ready(function () {
             //Получаем токен приложения
             vkBridge.send("VKWebAppGetAuthToken", {
                 "app_id": 8158397,
-                "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications,notify,apps"
+                "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications,notify"
             })
                 .then(data => {
                     console.log(777, data);
