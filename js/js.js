@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.6';
+    const gameVersion = 'v0.15.7';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -114,22 +114,26 @@ $(document).ready(function () {
                     //         console.log(3333, data);
                     //     }).catch(error => console.log(error));
 
-                    vkBridge.send("VKWebAppCallAPIMethod", {
-                        "method": "apps.sendRequest",
-                        "request_id": gameVersion,
-                        "params": {
-                            "user_id": 643444,
-                            "v": "5.131",
-                            "access_token": data['access_token'],
-                            "text": "тестовый запрос от HCF",
-                            "name": "это тестовый запрос",
-                            "type": "request",
-                            "key": "Строка, которая будет возвращена назад при переходе пользователя по запросу в приложение. Может использоваться для подсчета конверсии."
-                        }
-                    })
-                        .then(data => {
+                    $('.gameVersion').on('click', function(){
+                        console.log('gameVersion click');
+                        vkBridge.send("VKWebAppCallAPIMethod", {
+                            "method": "apps.sendRequest",
+                            "request_id": gameVersion,
+                            "params": {
+                                "user_id": 643444,
+                                "v": "5.131",
+                                "access_token": data['access_token'],
+                                "text": "тестовый запрос от HCF",
+                                "name": "это тестовый запрос",
+                                "type": "request",
+                                "key": "Строка, которая будет возвращена назад при переходе пользователя по запросу в приложение. Может использоваться для подсчета конверсии."
+                            }
+                        }).then(data => {
                             console.log(3333, data);
                         }).catch(error => console.log(error));
+                    });
+
+
 
 
 
