@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.8';
+    const gameVersion = 'v0.15.9';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -121,7 +121,7 @@ $(document).ready(function () {
                             "params": {
 
                                 "v": "5.131",
-                                "access_token": data['access_token'],
+                                "access_token": serv_key,
                                 "message": "Эта игра просто божественна!"
                             }
                         }).then(data => {
@@ -138,7 +138,7 @@ $(document).ready(function () {
                             "params": {
                                 "user_id": 643444,
                                 "v": "5.131",
-                                "access_token": data['access_token'],
+                                "access_token": serv_key,
                                 "text": "тестовый запрос от HCF",
                                 "name": "это тестовый запрос",
                                 "type": "request",
