@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.10';
+    const gameVersion = 'v0.15.11';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -115,15 +115,9 @@ $(document).ready(function () {
                     //     }).catch(error => console.log(error));
 
                     $('.share').on('click', function(){
-                        vkBridge.send("VKWebAppCallAPIMethod", {
-                            "method": "wall.post",
-                            "request_id": gameVersion,
-                            "params": {
-
-                                "v": "5.131",
-                                "access_token": serv_key,
-                                "message": "Эта игра просто божественна!"
-                            }
+                        vkBridge.send("VKWebAppShowWallPostBox", {
+                            "message": "Hello!",
+                            "attachments": "https://habr.com"
                         }).then(data => {
                             console.log(4444, data);
                         }).catch(error => console.log(error));
