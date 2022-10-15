@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.9';
+    const gameVersion = 'v0.15.10';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -132,18 +132,12 @@ $(document).ready(function () {
 
                     $('.gameVersion').on('click', function(){
                         console.log('gameVersion click');
-                        vkBridge.send("VKWebAppCallAPIMethod", {
-                            "method": "apps.sendRequest",
-                            "request_id": gameVersion,
-                            "params": {
-                                "user_id": 643444,
-                                "v": "5.131",
-                                "access_token": serv_key,
-                                "text": "тестовый запрос от HCF",
-                                "name": "это тестовый запрос",
-                                "type": "request",
-                                "key": "Строка, которая будет возвращена назад при переходе пользователя по запросу в приложение. Может использоваться для подсчета конверсии."
-                            }
+                        vkBridge.send("VKWebAppShowRequestBox", {
+
+                                uid: 643444,
+                                message: "Присоединяйся к игре HCF, это весело",
+                                requestKey: "unique_key_to_build_funnel"
+
                         }).then(data => {
                             console.log(3333, data);
                         }).catch(error => console.log(error));
