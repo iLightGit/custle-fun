@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.15';
+    const gameVersion = 'v0.15.17';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -101,8 +101,6 @@ $(document).ready(function () {
                     console.log(789, data['access_token']);
 
 
-
-
                     // vkBridge.send("VKWebAppCallAPIMethod", {
                     //     "method": "secure.addAppEvent",
                     //     "request_id": gameVersion,
@@ -118,7 +116,7 @@ $(document).ready(function () {
                     //         console.log(3333, data);
                     //     }).catch(error => console.log(error));
 
-                    $('.share').on('click', function(){
+                    $('.share').on('click', function () {
                         vkBridge.send("VKWebAppShowWallPostBox", {
                             "message": "Рекомендую",
                             "attachments": HCF_HREF
@@ -126,42 +124,44 @@ $(document).ready(function () {
                             console.log(4444, data);
 
 
-
                         }).catch(error => console.log(error));
                     });
 
 
-                    $('.gameVersion').on('click', function(){
+                    $('.gameVersion').on('click', function () {
 
                         // Выбор списка друзей
                         vkBridge.send("VKWebAppGetFriends", {}).then(data => {
                             console.log(2345, data);
 
-                            console.log(data?.users[0].id);
+                            let friendID = data?.users[0].id;
 
+
+                            // TODO в тетсовом режиме отправляем только админу, потом просто удалим присвоение
+                            friendID = 643444;
+
+
+                            //Это сама отправка запроса
+                            vkBridge.send("VKWebAppShowRequestBox", {
+
+                                uid: friendID,
+                                message: "Присоединяйся к игре HCF, это весело",
+                                requestKey: "unique_gcrown_key_to_build_funnel"
+// TODO unique_gcrown_key_to_build_funnel - это параметр который будет передан при запуске приложения из запроса
+                                //Возможно он должен быть уникальным, но на старте это не обязательно, т.к. абуз коронок не страшен
+
+                            }).then(data => {
+                                console.log(3333, data);
+                            }).catch(error => console.log(error));
 
                         }).catch(error => console.log(error));
 
-                    $(document).on('VKWebAppGetFriendsResult', function(){
-                        console.log(3456, $(this));
+                        $(document).on('VKWebAppGetFriendsResult', function () {
+                            console.log(3456, $(this));
+                        });
+
+
                     });
-
-
-
-                        // Это сама отправка запроса
-                        // vkBridge.send("VKWebAppShowRequestBox", {
-                        //
-                        //         uid: 643444,
-                        //         message: "Присоединяйся к игре HCF, это весело",
-                        //         requestKey: "unique_key_to_build_funnel"
-                        //
-                        // }).then(data => {
-                        //     console.log(3333, data);
-                        // }).catch(error => console.log(error));
-                    });
-
-
-
 
 
                     // $.ajax({
@@ -622,7 +622,6 @@ $(document).ready(function () {
         }).finally(() => console.log("Промис VKWebAppStorageGet HCF_friend_stars завершён"));
 
 
-
     $('.js-galleryItem').on('click', function () {
         if ($(this).hasClass('galleryItem_open') && !$(this).hasClass('galleryItem_active')) {
             $('.galleryItem_active').removeClass('galleryItem_active');
@@ -638,20 +637,20 @@ $(document).ready(function () {
 
     FN_check_gallery(); //удалить
 
-    function FN_check_gallery(){
+    function FN_check_gallery() {
         let item = $('.js-galleryItem[data-star]');
         let stars = $('.menuStar').length + g_friend_stars;
 
         stars = 7; // + должно браться и стора (то что поделились друзья)
 
-        for(i=0; i<item.length; i++){
+        for (i = 0; i < item.length; i++) {
             let needStar = parseInt(item.eq(i).attr('data-star'));
 
-            if(needStar <= stars){
+            if (needStar <= stars) {
                 item.eq(i).addClass('galleryItem_open')
             } else {
                 console.log(needStar, stars);
-                item.eq(i).append('<div class="galleryNeed">Нужно ' + (needStar - stars) +'<span class="galleryStar"></span></div>');
+                item.eq(i).append('<div class="galleryNeed">Нужно ' + (needStar - stars) + '<span class="galleryStar"></span></div>');
             }
         }
     }
