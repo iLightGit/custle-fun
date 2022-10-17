@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.14';
+    const gameVersion = 'v0.15.15';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -137,7 +137,7 @@ $(document).ready(function () {
                         vkBridge.send("VKWebAppGetFriends", {}).then(data => {
                             console.log(2345, data);
 
-                            console.log(data?.keys[0].id);
+                            console.log(data?.users[0].id);
 
 
                         }).catch(error => console.log(error));
