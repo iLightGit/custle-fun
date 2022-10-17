@@ -3,10 +3,11 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.11';
+    const gameVersion = 'v0.15.12';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
+    const HCF_HREF = 'https://vk.com/app8158397';
 
     let vkInit = false;
     let musicController = true;
@@ -99,6 +100,19 @@ $(document).ready(function () {
                     console.log(777, data);
                     console.log(789, data['access_token']);
 
+                    vkBridge.send("VKWebAppGetClientVersion")
+                        .then( (data) => {
+                            console.log('VKWebAppGetClientVersion', data);
+                            if (data.platform) {
+                                // Данные пользователя получены
+                            }
+                        })
+                        .catch( (error) => {
+                            // Ошибка
+                            console.log("Ошибка: " + error.error_type, error.error_data);
+                        });
+
+
                     // vkBridge.send("VKWebAppCallAPIMethod", {
                     //     "method": "secure.addAppEvent",
                     //     "request_id": gameVersion,
@@ -116,8 +130,8 @@ $(document).ready(function () {
 
                     $('.share').on('click', function(){
                         vkBridge.send("VKWebAppShowWallPostBox", {
-                            "message": "Hello!",
-                            "attachments": "https://habr.com"
+                            "message": "Рекомендую",
+                            "attachments": HCF_HREF
                         }).then(data => {
                             console.log(4444, data);
                         }).catch(error => console.log(error));
@@ -126,15 +140,28 @@ $(document).ready(function () {
 
                     $('.gameVersion').on('click', function(){
                         console.log('gameVersion click');
-                        vkBridge.send("VKWebAppShowRequestBox", {
 
-                                uid: 643444,
-                                message: "Присоединяйся к игре HCF, это весело",
-                                requestKey: "unique_key_to_build_funnel"
-
-                        }).then(data => {
-                            console.log(3333, data);
+                        // Выбор списка друзей
+                        vkBridge.send("VKWebAppGetFriends", {}).then(data => {
+                            console.log(2345, data);
                         }).catch(error => console.log(error));
+
+                    $('body').on('VKWebAppGetFriendsResult', function(){
+                        console.log(3456, $(this));
+                    });
+
+
+
+                        // Это сама отправка запроса
+                        // vkBridge.send("VKWebAppShowRequestBox", {
+                        //
+                        //         uid: 643444,
+                        //         message: "Присоединяйся к игре HCF, это весело",
+                        //         requestKey: "unique_key_to_build_funnel"
+                        //
+                        // }).then(data => {
+                        //     console.log(3333, data);
+                        // }).catch(error => console.log(error));
                     });
 
 
