@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.12';
+    const gameVersion = 'v0.15.13';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -100,17 +100,7 @@ $(document).ready(function () {
                     console.log(777, data);
                     console.log(789, data['access_token']);
 
-                    vkBridge.send("VKWebAppGetClientVersion")
-                        .then( (data) => {
-                            console.log('VKWebAppGetClientVersion', data);
-                            if (data.platform) {
-                                // Данные пользователя получены
-                            }
-                        })
-                        .catch( (error) => {
-                            // Ошибка
-                            console.log("Ошибка: " + error.error_type, error.error_data);
-                        });
+
 
 
                     // vkBridge.send("VKWebAppCallAPIMethod", {
@@ -134,19 +124,21 @@ $(document).ready(function () {
                             "attachments": HCF_HREF
                         }).then(data => {
                             console.log(4444, data);
+
+                            console.log(data?.keys[0].id);
+
                         }).catch(error => console.log(error));
                     });
 
 
                     $('.gameVersion').on('click', function(){
-                        console.log('gameVersion click');
 
                         // Выбор списка друзей
                         vkBridge.send("VKWebAppGetFriends", {}).then(data => {
                             console.log(2345, data);
                         }).catch(error => console.log(error));
 
-                    $('body').on('VKWebAppGetFriendsResult', function(){
+                    $(document).on('VKWebAppGetFriendsResult', function(){
                         console.log(3456, $(this));
                     });
 
