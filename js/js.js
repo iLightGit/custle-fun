@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.19';
+    const gameVersion = 'v0.15.20';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -48,7 +48,33 @@ $(document).ready(function () {
     }
 
     const serv_key = 'e7af1849e7af1849e7af184943e7d364f4ee7afe7af184985dcbeaa5682280d1a948f9e';
+
     // TODO если делать монетизацию - перегенерировать, и положить на сервер
+
+
+    function requestController() {
+
+        let appStartRequest = window.location.search.slice(1);
+        let appStartRequestKeyPart = appStartRequest.split('referrer=request&')[1];
+
+        if (appStartRequestKeyPart !== undefined) {
+            // Здесь храниться request_id - порядковый номер отправленного запроса и request_key - поле "requestKey" которое формируется при создании запроса
+
+            let appStartRequestKeyPart2 = appStartRequestKeyPart.split('request_key=')[1];
+
+            if(appStartRequestKeyPart2 !== undefined){
+                let appStartRequestKeyPart3 = appStartRequestKeyPart2.split('&')[0];
+
+                // "Ключ", переданный при старте запроса
+                console.log(1001, appStartRequestKeyPart3);
+            }
+
+        }
+    }
+
+    // Проверка действие из запроса
+    requestController();
+
 
     if (typeof m_urlVars.viewer_id !== 'undefined' && typeof m_urlVars.access_token !== 'undefined') {
 
@@ -85,16 +111,11 @@ $(document).ready(function () {
 
         }
 
-        console.log(1001, "параметры запуска", window.location.search.slice(1));
-        console.log(1002, "параметры запуска", window.location);
-        console.log(1003, "параметры запуска", window.location.hash);
-        console.log(1004, "параметры запуска", window.location.href);
 
         // !!!!!! Для тестов только на странице Сергей Ясвет
         if (m_urlVars.viewer_id === '85182172') { // Этот код выполнится только для меня
 
             console.log(555, m_urlVars.viewer_id, serv_key);
-
 
 
             //Получаем токен приложения
@@ -143,13 +164,12 @@ $(document).ready(function () {
                             let friendID = data?.users[0].id;
 
 
-                            //Это сама отправка запроса
                             vkBridge.send("VKWebAppShowRequestBox", {
 
                                 uid: friendID,
                                 message: "Присоединяйся к игре HCF, это весело",
-                                requestKey: "unique_gcrown_key_to_build_funnel"
-// TODO unique_gcrown_key_to_build_funnel - это параметр который будет передан при запуске приложения из запроса
+                                requestKey: "unique_gcrown_key_001"
+// TODO unique_gcrown_key_001 - это параметр который будет передан при запуске приложения из запроса
                                 //Возможно он должен быть уникальным, но на старте это не обязательно, т.к. абуз коронок не страшен
 
                             }).then(data => {
