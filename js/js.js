@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.17';
+    const gameVersion = 'v0.15.18';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -91,6 +91,8 @@ $(document).ready(function () {
 
             console.log(555, m_urlVars.viewer_id, serv_key);
 
+            console.log(1001, "параметры запуска", window.location.search.slice(1));
+
             //Получаем токен приложения
             vkBridge.send("VKWebAppGetAuthToken", {
                 "app_id": 8158397,
@@ -135,10 +137,6 @@ $(document).ready(function () {
                             console.log(2345, data);
 
                             let friendID = data?.users[0].id;
-
-
-                            // TODO в тетсовом режиме отправляем только админу, потом просто удалим присвоение
-                            friendID = 643444;
 
 
                             //Это сама отправка запроса
