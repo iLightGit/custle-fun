@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.18';
+    const gameVersion = 'v0.15.19';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -85,13 +85,17 @@ $(document).ready(function () {
 
         }
 
+        console.log(1001, "параметры запуска", window.location.search.slice(1));
+        console.log(1002, "параметры запуска", window.location);
+        console.log(1003, "параметры запуска", window.location.hash);
+        console.log(1004, "параметры запуска", window.location.href);
 
         // !!!!!! Для тестов только на странице Сергей Ясвет
         if (m_urlVars.viewer_id === '85182172') { // Этот код выполнится только для меня
 
             console.log(555, m_urlVars.viewer_id, serv_key);
 
-            console.log(1001, "параметры запуска", window.location.search.slice(1));
+
 
             //Получаем токен приложения
             vkBridge.send("VKWebAppGetAuthToken", {
