@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.21';
+    const gameVersion = 'v0.15.22';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -118,21 +118,7 @@ $(document).ready(function () {
         }).catch(error => console.log(error));
     }
 
-    $('.gameVersion').on('click', function () {
 
-        // Выбор списка друзей
-        vkBridge.send("VKWebAppGetFriends", {}).then(data => {
-
-            sendRequest(data?.users[0].id, "Присоединяйся к игре HCF, это весело", "gcrown_request_001");
-
-        }).catch(error => console.log(error));
-
-        $(document).on('VKWebAppGetFriendsResult', function () {
-            console.log(3456, $(this));
-        });
-
-
-    });
 
 
     if (typeof m_urlVars.viewer_id !== 'undefined' && typeof m_urlVars.access_token !== 'undefined') {
@@ -580,7 +566,25 @@ $(document).ready(function () {
             '</div>');
     }
 
-    $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>')
+    $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>');
+
+    $('.gameVersion').on('click', function () {
+
+        console.log('gameVersion click');
+
+        // Выбор списка друзей
+        vkBridge.send("VKWebAppGetFriends", {}).then(data => {
+
+            sendRequest(data?.users[0].id, "Присоединяйся к игре HCF, это весело", "gcrown_request_001");
+
+        }).catch(error => console.log(error));
+
+        $(document).on('VKWebAppGetFriendsResult', function () {
+            console.log(3456, $(this));
+        });
+
+
+    });
 
     function removeLevel() {
         $('.bonusScoreBox').remove();
