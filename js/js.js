@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.20';
+    const gameVersion = 'v0.15.21';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -52,28 +52,87 @@ $(document).ready(function () {
     // TODO если делать монетизацию - перегенерировать, и положить на сервер
 
 
-    function requestController() {
+    function getRequestKey(url) {
 
-        let appStartRequest = window.location.search.slice(1);
-        let appStartRequestKeyPart = appStartRequest.split('referrer=request&')[1];
+        let appStartRequestKeyPart = url.split('referrer=request&')[1];
 
         if (appStartRequestKeyPart !== undefined) {
             // Здесь храниться request_id - порядковый номер отправленного запроса и request_key - поле "requestKey" которое формируется при создании запроса
 
             let appStartRequestKeyPart2 = appStartRequestKeyPart.split('request_key=')[1];
 
-            if(appStartRequestKeyPart2 !== undefined){
+            if (appStartRequestKeyPart2 !== undefined) {
                 let appStartRequestKeyPart3 = appStartRequestKeyPart2.split('&')[0];
 
                 // "Ключ", переданный при старте запроса
                 console.log(1001, appStartRequestKeyPart3);
+
+                return appStartRequestKeyPart3;
+                // Далее надо как-то передать информацию об успешном выполнении запроса "просящему"
             }
 
         }
     }
 
     // Проверка действие из запроса
+
+
+    function getRequestSender(url) {
+
+        let RequestSenderPart1 = url.split('&user_id=')[1];
+
+        if (RequestSenderPart1 !== undefined) {
+
+            let RequestSenderPart2 = RequestSenderPart1.split('&')[0];
+
+            console.log(4001, RequestSenderPart2);
+
+            return RequestSenderPart2
+        }
+    }
+
+    function requestController() {
+        let requestKey = getRequestKey(window.location.search.slice(1));
+
+        if (requestKey === 'gcrown_request_001') {
+            let requestSenderID = getRequestSender(window.location.search.slice(1));
+
+            sendRequest(requestSenderID, 'Я отправил тебе корону, возвращайся в игру!', 'send_gcrown_key_001')
+        }
+
+        if (requestKey === 'send_gcrown_key_001') {
+            console.log(5001, 'Будем начислять корону!')
+        }
+    }
+
     requestController();
+
+    function sendRequest(requestFriendID, requestMessage, requestKey) {
+
+        vkBridge.send("VKWebAppShowRequestBox", {
+            uid: requestFriendID,
+            message: requestMessage,
+            requestKey: requestKey
+        }).then(data => {
+            console.log('sendRequest', data);
+        }).catch(error => console.log(error));
+    }
+
+    $('.gameVersion').on('click', function () {
+
+        // Выбор списка друзей
+        vkBridge.send("VKWebAppGetFriends", {}).then(data => {
+
+            sendRequest(data?.users[0].id, "Присоединяйся к игре HCF, это весело", "gcrown_request_001");
+
+        }).catch(error => console.log(error));
+
+        $(document).on('VKWebAppGetFriendsResult', function () {
+            console.log(3456, $(this));
+        });
+
+
+    });
 
 
     if (typeof m_urlVars.viewer_id !== 'undefined' && typeof m_urlVars.access_token !== 'undefined') {
@@ -149,40 +208,7 @@ $(document).ready(function () {
                             "attachments": HCF_HREF
                         }).then(data => {
                             console.log(4444, data);
-
-
                         }).catch(error => console.log(error));
-                    });
-
-
-                    $('.gameVersion').on('click', function () {
-
-                        // Выбор списка друзей
-                        vkBridge.send("VKWebAppGetFriends", {}).then(data => {
-                            console.log(2345, data);
-
-                            let friendID = data?.users[0].id;
-
-
-                            vkBridge.send("VKWebAppShowRequestBox", {
-
-                                uid: friendID,
-                                message: "Присоединяйся к игре HCF, это весело",
-                                requestKey: "unique_gcrown_key_001"
-// TODO unique_gcrown_key_001 - это параметр который будет передан при запуске приложения из запроса
-                                //Возможно он должен быть уникальным, но на старте это не обязательно, т.к. абуз коронок не страшен
-
-                            }).then(data => {
-                                console.log(3333, data);
-                            }).catch(error => console.log(error));
-
-                        }).catch(error => console.log(error));
-
-                        $(document).on('VKWebAppGetFriendsResult', function () {
-                            console.log(3456, $(this));
-                        });
-
-
                     });
 
 
