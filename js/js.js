@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Вынести в он старт
     vkBridge.send("VKWebAppInit");
 
-    const gameVersion = 'v0.15.22';
+    const gameVersion = 'v0.15.23';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -93,6 +93,8 @@ $(document).ready(function () {
 
     function requestController() {
         let requestKey = getRequestKey(window.location.search.slice(1));
+
+        console.log(6001, requestKey, window.location.search.slice(1))
 
         if (requestKey === 'gcrown_request_001') {
             let requestSenderID = getRequestSender(window.location.search.slice(1));
