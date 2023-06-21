@@ -640,7 +640,7 @@ $(document).ready(function () {
     function startMusic() {
         if (musicController && startMusicController) {
             startMusicController = false;
-            playAudio();
+            // playAudio();
         }
     }
 
@@ -711,7 +711,7 @@ $(document).ready(function () {
 
     $(window).load(function () {
 
-        start(2, 2, 1);
+        start(6, 6, 1);
 
         document.onclick = startMusic;
 
