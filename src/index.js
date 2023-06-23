@@ -1,9 +1,19 @@
-$(document).ready(function () {
+import React from "react";
+import ReactDOM from "react-dom";
 
-    // Вынести в он старт
-    vkBridge.send("VKWebAppInit");
+import $ from 'jquery';
+import vkBridge from "@vkontakte/vk-bridge";
 
-    const gameVersion = 'v0.15.23';
+// Вынести в он старт
+vkBridge.send("VKWebAppInit");
+
+
+
+document.addEventListener('DOMContentLoaded', function(){
+
+
+
+    const gameVersion = 'v0.20';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -294,7 +304,7 @@ $(document).ready(function () {
             el.addClass('active');
             musicPlay('./music/open_card.mp3');
 
-            if (boxLi.find('.active').size() === 2) {
+            if (boxLi.find('.active').length === 2) {
 
                 parent.addClass('locked');
                 firstEL = $('.li.active:first');
@@ -316,7 +326,7 @@ $(document).ready(function () {
             }
 
             // Если открывалась 3-я, то закрывались 2 другие
-            if (boxLi.find('.active').size() === 3) {
+            if (boxLi.find('.active').length === 3) {
                 $('.li.first, .li.last').removeClass('active first last');
             }
         }
@@ -343,7 +353,7 @@ $(document).ready(function () {
 
     // Проверка на завершение игры
     function checkComplete() {
-        if (($('.li.clear').size() === $('.li').size())) {
+        if (($('.li.clear').length === $('.li').length)) {
 
             setTimeout(function () {
 
@@ -483,7 +493,7 @@ $(document).ready(function () {
         clearInterval(viewElementsInterval);
         $('.m_content').addClass('locked');
 
-        let iSize = $('.m_content li').size();
+        let iSize = $('.m_content li').length;
         let i = 0;
 
 
@@ -514,7 +524,7 @@ $(document).ready(function () {
     // function viewElements() {
     //
     //     $('.counter ').append('<span class="timer"></span>');
-    //     iSize = boxLi.size();
+    //     iSize = boxLi.length;
     //     var i = 0;
     //
     //     function showAllEl() {
@@ -563,7 +573,7 @@ $(document).ready(function () {
 
     function addBonusPoints() {
         $('.btnSmallContent').after('<div class="bonusScoreBox">' +
-            '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').size() + '</div></span></div>' +
+            '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').length + '</div></span></div>' +
             '<div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div>' +
             '</div>');
     }
@@ -709,7 +719,7 @@ $(document).ready(function () {
         }
     }
 
-    $(window).load(function () {
+    $(window).on('load', function () {
 
         start(2, 2, 1);
 
