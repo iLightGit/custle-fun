@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import $ from 'jquery';
-import vkBridge from "@vkontakte/vk-bridge";
+import bridge from "@vkontakte/vk-bridge";
 
 // Вынести в он старт
-vkBridge.send("VKWebAppInit");
+bridge.send("VKWebAppInit");
 
 
 
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function sendRequest(requestFriendID, requestMessage, requestKey) {
 
-        vkBridge.send("VKWebAppShowRequestBox", {
+        bridge.send("VKWebAppShowRequestBox", {
             uid: requestFriendID,
             message: requestMessage,
             requestKey: requestKey
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
             let storageKey = 'HCF_level_' + (i + 1);
 
-            vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
+            bridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
                 .then(result => {
                     let storageValue = result?.keys[0].value;
 
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
             //Получаем токен приложения
-            vkBridge.send("VKWebAppGetAuthToken", {
+            bridge.send("VKWebAppGetAuthToken", {
                 "app_id": 8158397,
                 "scope": "friends,photos,video,stories,pages,status,notes,wall,docs,groups,stats,market,ads,notifications,notify"
             })
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     console.log(789, data['access_token']);
 
 
-                    // vkBridge.send("VKWebAppCallAPIMethod", {
+                    // bridge.send("VKWebAppCallAPIMethod", {
                     //     "method": "secure.addAppEvent",
                     //     "request_id": gameVersion,
                     //     "params": {
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     //     }).catch(error => console.log(error));
 
                     $('.share').on('click', function () {
-                        vkBridge.send("VKWebAppShowWallPostBox", {
+                        bridge.send("VKWebAppShowWallPostBox", {
                             "message": "Рекомендую",
                             "attachments": HCF_HREF
                         }).then(data => {
@@ -365,7 +365,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 $('body').append('<div class="btnMenuBox">' +
                     '<div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div>' +
                     '<div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div>' +
-                    '<div class="btnMenu btnHome" data-level="' + gameLevel + '"></div></div></div>');
+                    '<div class="btnMenu btnHome" data-level="' + gameLevel + '"></div>' +
+                    '</div></div>');
 
                 $('body').find('.btnRestart').on('click', function () {
                     removeLevel();
@@ -417,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 // Ипользуется только для мобилок
                 // Выводим, если больше 7 очков (не для 1 уровня)
                 if (sScore > 7) {
-                    vkBridge.send("VKWebAppShowLeaderBoardBox", {user_result: sScore})
+                    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: sScore})
                         .then(data => console.log(data.success))
                         .catch(error => console.log(error));
                 }
@@ -427,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     // + Запись звезд в StorageVK
                     let storageKey = 'HCF_level_' + gameLevel;
 
-                    vkBridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
+                    bridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
                         .then(result => {
                             let storageValue = result?.keys[0].value;
                             console.log('VKWebAppStorageGet1', storageValue);
@@ -473,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     function storageSetFN(storageKey, storageValue) {
-        vkBridge.send("VKWebAppStorageSet", {
+        bridge.send("VKWebAppStorageSet", {
             key: `${storageKey}`, // Должны быть строкой в любом случае
             value: `${storageValue}`, // Должны быть строкой в любом случае
         }).then(result => {
@@ -585,7 +586,7 @@ document.addEventListener('DOMContentLoaded', function(){
         console.log('gameVersion click');
 
         // Выбор списка друзей
-        vkBridge.send("VKWebAppGetFriends", {}).then(data => {
+        bridge.send("VKWebAppGetFriends", {}).then(data => {
 
             sendRequest(data?.users[0].id, "Присоединяйся к игре HCF, это весело", "gcrown_request_001");
 
@@ -625,9 +626,48 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+
+    // Добавить игру на экран (мобильная версия)
+    // Проверка
+    bridge.send("VKWebAppAddToHomeScreenInfo", {})
+        .then(data => {
+            // Если поддерживается и еще не добавлена - тогда показываем
+            if (data.is_feature_supported &&!data.is_added_to_home_screen) {
+                $('.js-addHomeScreen').show().on('click', function(){
+                    addToHomeScreen();
+                });
+            }
+        })
+        .catch(error => console.log(error));
+    // Добавление
+    function addToHomeScreen(){
+        bridge.send("VKWebAppAddToHomeScreen", {})
+            .then(data => {
+                if (data.result) {
+                    // После добавления - прячем кнопку
+                    $('.js-addHomeScreen').hide();
+                }
+            })
+            .catch(error => console.log(error));
+    }
+
+    // Добавление игры в избранное (десктопная версия)
+    // Событие само проверяет себя и не вызывает окно добавления, если уже добавлено
+    function addGameToFavorite(){
+        bridge.send("VKWebAppAddToFavorites", {})
+            .then(data => {
+
+                if (data.result) {
+                    // Этот код нужен если надо скрыть кнопку
+                }
+            })
+            .catch(error => console.log(error));
+    }
+    addGameToFavorite();
+
     //Пригласить друга
     $('.js-inviteFriend').on('click', function () {
-        vkBridge.send("VKWebAppShowInviteBox", {})
+        bridge.send("VKWebAppShowInviteBox", {})
             .then(data => console.log(data.success))
             .catch(error => console.log(error));
     });
@@ -668,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
     // + Достать из StorageVK состояние музыки
-    vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
+    bridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
         .then(result => {
             if (result?.keys[0].value === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
                 musicController = false;
@@ -678,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
     // + Достать бонусные звезды (полученные от друзей)
-    vkBridge.send("VKWebAppStorageGet", {"keys": ['HCF_friend_stars']})
+    bridge.send("VKWebAppStorageGet", {"keys": ['HCF_friend_stars']})
         .then(result => {
             if (result?.keys[0].value !== "") {
                 g_friend_stars = parseInt(result?.keys[0].value);
