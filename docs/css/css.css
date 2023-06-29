@@ -299,7 +299,8 @@ table {
 }
 
 .playerScore,
-.bonusScore {
+.bonusScore,
+.energy_timer{
     margin: auto;
     text-shadow: 1px 0 5px #fff, 0 0 21px #fff;
     border-radius: 5px;
@@ -344,6 +345,7 @@ table {
     position: relative;
     z-index: 10;
     top: 30px;
+    width: 200px;
 }
 
 .btnSmallContent .btnSmallContent__btnHome {
@@ -438,7 +440,7 @@ table {
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 5px;
-    box-shadow: 0 0 0 5px #000, 0 0 0 3px #fff inset;
+    box-shadow: 0 0 0 4px #000, 0 0 0 3px #fff inset;
     display: inline-block;
     margin: 12px 10px;
     filter: grayscale(100%);
@@ -674,3 +676,66 @@ table {
 
 
 /* BG */
+
+/* + energy_box */
+.energy_box{
+    display: none;
+}
+
+.energy_content{
+    width: 150px;
+    position: relative;
+    left: 50%;
+    margin-left: -50px;
+}
+
+.energy_counter{
+    display: inline-block;
+}
+
+.energy_sep{
+    margin: 0 -8px;
+}
+
+.energy_count,
+.energy_max {
+    width: 10px;
+}
+
+.energy_fill {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 2px black;
+}
+
+.energy_timer{
+    position: relative;
+    top: -4px;
+    left: 4px;
+    width: 49px;
+    display: inline-block;
+}
+
+.energyTimer_fill{
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+
+    line-height: 20px;
+}
+
+.is--menuLevel-open .energy_box{
+    display: block;
+}
+
+.energy_add {
+    display: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 2px black;
+    margin-left: 6px;
+    cursor: pointer;
+}
+/* - energy_box */
