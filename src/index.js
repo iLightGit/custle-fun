@@ -1,21 +1,22 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import $ from 'jquery';
 import bridge from "@vkontakte/vk-bridge";
 
 bridge.send("VKWebAppInit");
 
 
-
-document.addEventListener('DOMContentLoaded', function(){
-
+document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.20';
+    const gameVersion = 'v0.21.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
     const HCF_HREF = 'https://vk.com/app8158397';
+
+    // Макасимальная энергия и длительность восстановления
+    const ENERGY_MAX = 5;
+    const ENERGY_DURATION = 20;
 
     let vkInit = false;
     let musicController = true;
@@ -127,8 +128,6 @@ document.addEventListener('DOMContentLoaded', function(){
             console.log('sendRequest', data);
         }).catch(error => console.log(error));
     }
-
-
 
 
     if (typeof m_urlVars.viewer_id !== 'undefined' && typeof m_urlVars.access_token !== 'undefined') {
@@ -376,13 +375,14 @@ document.addEventListener('DOMContentLoaded', function(){
                 $('body').find('.btnHome').on('click', function () {
                     let completeLvl = $(this).data('level');
 
-                    $('.menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
-                    $('.menuLevel').eq(completeLvl).addClass('menuLevel_open');
+                    $('.js-menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
+                    $('.js-menuLevel').eq(completeLvl).addClass('menuLevel_open');
                     $('.js-gameBox').hide();
                     removeLevel();
                     $('.js-menuMainLevelBox').show();
                     $('.js-btnHomeSmall').hide();
                     musicPlay('./music/level_new.mp3');
+                    $('.js-mainBox').addClass('is--menuLevel-open');
                 });
 
 
@@ -609,18 +609,50 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     }
 
-    $('.menuLevel').on('click', function () {
+    function currentEnergyFN() {
+        // Отнимает от текущего времени имеющиеся/накопленные секунды содержащиеся в попытках
+        let curEnergy = currentTime() - parseInt($('.js-energy_count').text()) * ENERGY_DURATION * 60;
+        let split = $('.js-energyTimer').text().split(':');
+        let minutes = parseInt(split[0]);
+        let seconds = parseInt(split[1]);
+        let timerEnergy = minutes * 60 + seconds;
+        let timerSaveEnergy = ENERGY_DURATION * 60 - timerEnergy;
+
+        return curEnergy - timerSaveEnergy;
+    }
+
+    $('.js-menuLevel').on('click', function () {
+        // Если уровень доступен
+
         if ($(this).hasClass('menuLevel_open')) {
-            dataSizeX = $(this).data('size-x');
-            dataSizeY = $(this).data('size-y');
 
-            gameLevel = $(this).index() + 1;
+            let currentEnergy = parseInt($('.js-energy_count').text())
+            if (currentEnergy > 0) {
+                $('.js-energy_count').text(currentEnergy - 1);
+                storageSetFN('HCF_energy', currentEnergyFN());
+                // Запускаем таймер, только если он еще не запущен
+                if (gTimer === 0) {
+                    let display = document.querySelector('#time');
+                    startTimer(ENERGY_DURATION * 60, display);
+                }
 
-            $('.js-gameBox').show();
-            $('.menuLevelBox').hide();
-            start(dataSizeX, dataSizeY, gameLevel);
-            $('.js-btnHomeSmall').show();
-            musicPlay('./music/level_new.mp3')
+
+                dataSizeX = $(this).data('size-x');
+                dataSizeY = $(this).data('size-y');
+
+                gameLevel = $(this).index() + 1;
+
+                $('.js-gameBox').show();
+                $('.menuLevelBox').hide();
+                start(dataSizeX, dataSizeY, gameLevel);
+                $('.js-btnHomeSmall').show();
+                musicPlay('./music/level_new.mp3');
+                $('.js-mainBox').removeClass('is--menuLevel-open');
+            } else {
+                alert('Нет энергии');
+            }
+
+
         }
     });
 
@@ -630,15 +662,16 @@ document.addEventListener('DOMContentLoaded', function(){
     bridge.send("VKWebAppAddToHomeScreenInfo", {})
         .then(data => {
             // Если поддерживается и еще не добавлена - тогда показываем
-            if (data.is_feature_supported &&!data.is_added_to_home_screen) {
-                $('.js-addHomeScreen').show().on('click', function(){
+            if (data.is_feature_supported && !data.is_added_to_home_screen) {
+                $('.js-addHomeScreen').show().on('click', function () {
                     addToHomeScreen();
                 });
             }
         })
         .catch(error => console.log(error));
+
     // Добавление
-    function addToHomeScreen(){
+    function addToHomeScreen() {
         bridge.send("VKWebAppAddToHomeScreen", {})
             .then(data => {
                 if (data.result) {
@@ -651,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Добавление игры в избранное (десктопная версия)
     // Событие само проверяет себя и не вызывает окно добавления, если уже добавлено
-    function addGameToFavorite(){
+    function addGameToFavorite() {
         bridge.send("VKWebAppAddToFavorites", {})
             .then(data => {
 
@@ -661,6 +694,7 @@ document.addEventListener('DOMContentLoaded', function(){
             })
             .catch(error => console.log(error));
     }
+
     addGameToFavorite();
 
     //Пригласить друга
@@ -742,7 +776,6 @@ document.addEventListener('DOMContentLoaded', function(){
     function FN_check_gallery() {
         let item = $('.js-galleryItem[data-star]');
         let stars = $('.menuStar').length + g_friend_stars;
-
         stars = 7; // + должно браться и стора (то что поделились друзья)
 
         for (i = 0; i < item.length; i++) {
@@ -758,11 +791,91 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     $(window).on('load', function () {
-
-        start(2, 2, 1);
-
         document.onclick = startMusic;
-
+        $('.js-mainBox').addClass('is--menuLevel-open');
+        $('.js-menuMainLevelBox').show();
     });
 
+    function currentTime() {
+        return Date.now() / 1000 | 0;
+    }
+
+    function setCurrentEnergy(energyCount) {
+        $('.js-energy_count').text(energyCount);
+    }
+
+    function energyCalculator() {
+
+        bridge.send("VKWebAppStorageGet", {"keys": ['HCF_energy']})
+            .then(result => {
+                let energyStorageVal = parseInt(result?.keys[0].value);
+                let energyVal;
+
+                if (!isNaN(energyStorageVal)) {
+
+                    // Получаем значение секунд накопленной энергии
+                    let maxEnergy = ENERGY_MAX * ENERGY_DURATION * 60;
+                    energyVal = (currentTime() - energyStorageVal);
+
+                    if (energyVal >= maxEnergy) {
+                        energyVal = 5;
+                    } else {
+
+                        // Имеющаяся энергия в виде дробного числа
+                        let energyFullNumber = (energyVal / 60) / ENERGY_DURATION;
+                        // Целое значение имеющейся энергии
+                        energyVal = Math.floor(energyFullNumber);
+                        // Вычисляем остаток секунд для таймера
+                        let timerVal = Math.round((1 - (energyFullNumber - energyVal)) * ENERGY_DURATION * 60);
+
+                        // Запускаем таймер, только если он еще не запущен
+                        if (gTimer === 0) {
+                            let display = document.querySelector('#time');
+                            startTimer(timerVal, display);
+                        }
+                    }
+                } else {
+                    energyVal = 5;
+                }
+                setCurrentEnergy(energyVal);
+            }).finally(() => console.log("Промис VKWebAppStorageGet HCF_energy завершён"));
+    }
+
+    energyCalculator();
+
+    let gTimer = 0;
+
+    function startTimer(duration, display) {
+        $('.energy_timer').show();
+        clearInterval(gTimer);
+        let timer = duration, minutes, seconds;
+        let currentEnergy = parseInt($('.js-energy_count').text());
+        gTimer = setInterval(function () {
+
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            console.log('currentEnergy', currentEnergy, timer, minutes, seconds);
+
+            if (--timer < 0) {
+
+                timer = duration;
+                currentEnergy = parseInt($('.js-energy_count').text());
+                currentEnergy++;
+
+                $('.js-energy_count').text(currentEnergy);
+
+                if (currentEnergy >= 5) {
+                    $('.energy_timer').hide();
+                    clearInterval(gTimer);
+                    gTimer = 0;
+                }
+            }
+        }, 1000);
+    }
 });
