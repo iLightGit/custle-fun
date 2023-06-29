@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.21.0';
+    const gameVersion = 'v0.22.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -804,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('.js-energy_count').text(energyCount);
     }
 
-    function energyCalculator() {
+    function energyCalculator(bonusEnergy) {
 
         bridge.send("VKWebAppStorageGet", {"keys": ['HCF_energy']})
             .then(result => {
@@ -837,6 +837,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     energyVal = 5;
                 }
+                if(bonusEnergy !== undefined){
+                    energyVal += bonusEnergy
+                }
                 setCurrentEnergy(energyVal);
             }).finally(() => console.log("Промис VKWebAppStorageGet HCF_energy завершён"));
     }
@@ -860,8 +863,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             display.textContent = minutes + ":" + seconds;
 
-            console.log('currentEnergy', currentEnergy, timer, minutes, seconds);
-
             if (--timer < 0) {
 
                 timer = duration;
@@ -878,4 +879,45 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, 1000);
     }
+
+    // Проверка готовности рекламы
+    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+        .then((data) => {
+            if (data.result) {
+                // Предзагруженная реклама есть.
+
+                // Теперь можно создать кнопку
+                // "Прокачать героя за рекламу".
+                // ...
+                $('.js-energy_add').show();
+            } else {
+                console.log('Рекламные материалы не найдены.');
+                // Запрос на загрузку рекламных материалов может быть не выполнен. Обычно это происходит из-за низкой скорости интернет-соединения или кратковременных сбоев в работе сети.
+            }
+                // Чтобы обойти эту проблему, ваша игра может вызывать VKWebAppCheckNativeAds периодически, по таймеру, во время своей работы, чтобы гарантированно получить материалы ко времени показа.
+        })
+        .catch((error) => { console.log(error); /* Ошибка */  });
+
+    // Обработчик нажатия кнопки "Посмотрите рекламу, чтобы прокачать героя"
+    function fooButtonClick()
+    {
+        // Показать рекламу
+        bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+            .then((data) => {
+                if (data.result){
+                    console.log('Реклама показана');
+                    energyCalculator(1);
+                    storageSetFN('HCF_energy', currentEnergyFN());
+                } // Успех
+
+
+                else // Ошибка
+                    console.log('Ошибка при показе');
+            })
+            .catch((error) => { console.log(error); /* Ошибка */ });
+    }
+
+    $('.js-energy_add').on('click', function(){
+        fooButtonClick();
+    })
 });

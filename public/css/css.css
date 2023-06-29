@@ -345,6 +345,7 @@ table {
     position: relative;
     z-index: 10;
     top: 30px;
+    width: 200px;
 }
 
 .btnSmallContent .btnSmallContent__btnHome {
@@ -682,7 +683,7 @@ table {
 }
 
 .energy_content{
-    width: 110px;
+    width: 150px;
     position: relative;
     left: 50%;
     margin-left: -50px;
@@ -712,6 +713,8 @@ table {
     position: relative;
     top: -4px;
     left: 4px;
+    width: 49px;
+    display: inline-block;
 }
 
 .energyTimer_fill{
@@ -724,5 +727,15 @@ table {
 
 .is--menuLevel-open .energy_box{
     display: block;
+}
+
+.energy_add {
+    display: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 2px black;
+    margin-left: 6px;
+    cursor: pointer;
 }
 /* - energy_box */
