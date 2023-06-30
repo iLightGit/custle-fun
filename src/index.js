@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.23.1';
+    const gameVersion = 'v0.24.0';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -348,6 +348,10 @@ document.addEventListener('DOMContentLoaded', function () {
         checkComplete();
     }
 
+    function getRandomNumber(min, max) { // min and max included
+        return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+
     // Проверка на завершение игры
     function checkComplete() {
         if (($('.li.clear').length === $('.li').length)) {
@@ -355,12 +359,33 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
 
 
-                boxLi.animate({
-                    opacity: 0
-                }, 700);
+
+
+
+                let puzzleBackground = getRandomNumber(2, 7);
+                let storageKey = 'puzzleBg_'+puzzleBackground;
+                let score = parseInt($('.playerScoreCounter').text())
+
+                // + Запись пазлов в стор
+                bridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
+                    .then(result => {
+                        let storageValue = result?.keys[0].value;
+
+                        if (storageValue === "" ) {
+                            storageValue = "0";
+                        }
+                        let newStorageValue = parseInt(storageValue) + score;
+                        console.log('puzzleBg_'+puzzleBackground, newStorageValue, score, parseInt(storageValue));
+
+                        storageSetFN(storageKey, newStorageValue)
+
+                    }).finally(() => console.log("Промис 'puzzleBg_' завершён"));
+                // - Запись пазлов в стор
+
 
                 $('body').append('<div class="btnMenuBox">' +
                     '<div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div>' +
+                    '<div class="levelRewardBox"><div class="levelReward" data-bg="'+puzzleBackground+'"><div class="levelRewardCount">'+ score +'</div></div></div>' +
                     '<div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div>' +
                     '<div class="btnMenu btnHome" data-level="' + gameLevel + '"></div>' +
                     '</div></div>');
