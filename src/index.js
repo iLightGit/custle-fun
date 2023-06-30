@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.22.0';
+    const gameVersion = 'v0.23.1';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ENERGY_DURATION = 20;
 
     let vkInit = false;
-    let musicController = true;
+    let musicController = false;
     let startMusicController = true;
     let viewElementsInterval;
     let g_friend_stars = 0;
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     document.addEventListener("visibilitychange", () => {
-        if (musicController) {
+        if (musicController && !startMusicController) {
             if (document.visibilityState === "visible") {
                 playAudio();
             } else {
@@ -742,9 +742,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // + Достать из StorageVK состояние музыки
     bridge.send("VKWebAppStorageGet", {"keys": ['HCF_music']})
         .then(result => {
-            if (result?.keys[0].value === "") { // Почему-то если мы передаем в сторедж 0, то value становится пустым
+            if (result?.keys[0].value === "0") {
                 musicController = false;
                 $('.js-btnSound').addClass('mod--deactivated');
+            } else {
+                musicController = true;
             }
         }).finally(() => console.log("Промис VKWebAppStorageGet HCF_music завершён"));
 
