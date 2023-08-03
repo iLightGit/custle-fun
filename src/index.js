@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.24.1';
+    const gameVersion = 'v0.24.3';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
 
 
-                let puzzleBackground = getRandomNumber(2, 7);
+                let puzzleBackground = getRandomNumber(1, 6);
                 let storageKey = 'puzzleBg_' + puzzleBackground;
                 let score = parseInt($('.playerScoreCounter').text())
 
@@ -810,21 +810,37 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function FN_check_gallery() {
-        let item = $('.js-galleryItem[data-star]');
+        let item = $('.js-galleryItem[data-points]');
         let stars = $('.menuStar').length + g_friend_stars;
         stars = 7; // + должно браться и стора (то что поделились друзья)
 
         $('.galleryNeed').remove();
 
-        for (i = 0; i < item.length; i++) {
-            let needStar = parseInt(item.eq(i).attr('data-star'));
+        for (let i = 0; i < item.length; i++) {
+            let needStar = parseInt(item.eq(i).attr('data-points'));
 
-            if (needStar <= stars) {
-                item.eq(i).addClass('galleryItem_open')
-            } else {
-                console.log(needStar, stars);
-                item.eq(i).append('<div class="galleryNeed">Нужно ' + (needStar - stars) + '<span class="galleryStar"></span></div>');
-            }
+            let puzzleBackground = i+1;
+            let storageKey = 'puzzleBg_' + puzzleBackground;
+
+            // +  пазлов в стор
+            bridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
+                .then(result => {
+                    let storageValue = result?.keys[0].value;
+
+                    if (storageValue === "") {
+                        storageValue = "0";
+                    }
+
+                    console.log('puzzleBg_' + puzzleBackground, parseInt(storageValue));
+                    stars = parseInt(storageValue);
+                    if (needStar <= stars) {
+                        item.eq(i).addClass('galleryItem_open')
+                    } else {
+                        console.log(needStar, stars, item.eq(i));
+                        item.eq(i).append('<div class="galleryNeed">Ещё ' + (needStar - stars) + '<span class="galleryPuzzle"></span></div>');
+                    }
+                }).finally(() => console.log("Промис 'puzzleBg_' завершён"));
+            // -  пазлов в стор
         }
     }
 

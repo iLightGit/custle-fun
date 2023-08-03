@@ -547,7 +547,7 @@ table {
 /* GALLERY */
 
 .galleryBox {
-    text-align: left;
+    text-align: center;
     padding-left: 30px;
     width: 600px;
     margin: auto;
@@ -559,8 +559,8 @@ table {
 
 .galleryItem {
     position: relative;
-    width: 530px;
-    height: 100px;
+    width: 400px;
+    height: 80px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -568,18 +568,18 @@ table {
     display: inline-block;
     margin: 12px 10px;
     text-align: center;
+    box-shadow: 0 0 0 5px #000, 0 0 0 3px #fff inset;
 }
 
 
 .galleryItem__cont {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    right: 160px;
     border-radius: 5px;
-    box-shadow: 0 0 0 5px #000, 0 0 0 3px #fff inset;
-    filter: grayscale(100%);
+    filter: grayscale(70%);
 }
 
 .galleryItem:before {
@@ -617,11 +617,11 @@ table {
     font-size: 18px;
     font-weight: bold;
     position: relative;
-    height: 100px;
-    line-height: 100px;
+    height: 80px;
+    line-height: 80px;
     z-index: 5;
     background: #ffffffbf;
-    width: 200px;
+    width: 160px;
     float: right;
     border-radius: 5px;
 }
@@ -637,6 +637,19 @@ table {
     margin-top: -2px;
 }
 
+.galleryPuzzle {
+    z-index: 2;
+    width: 32px;
+    height: 32px;
+    background: url(../img/level/puzzle.png) center no-repeat;
+    background-size: contain;
+    display: inline-block;
+    vertical-align: middle;
+
+    margin-left: 10px;
+    margin-top: -1px;
+}
+
 /* GALLERY */
 
 /* BG */
@@ -647,31 +660,28 @@ table {
     background-size: cover;
 }
 
-[data-bg="1"] {
+[data-bg="0"] {
     background: url(../img/bg/0.png) center;
 }
 
-[data-bg="2"] {
+[data-bg="1"] {
     background-image: url(../img/bg/1.jpg);
 }
 
-[data-bg="3"] {
+[data-bg="2"]{
     background-image: url(../img/bg/2.jpg);
 }
 
-[data-bg="4"] {
+[data-bg="3"]{
     background-image: url(../img/bg/3.jpg);
 }
-
-[data-bg="5"] {
+[data-bg="4"]{
     background-image: url(../img/bg/4.jpg);
 }
-
-[data-bg="6"] {
+[data-bg="5"]{
     background-image: url(../img/bg/5.jpg);
 }
-
-[data-bg="7"] {
+[data-bg="6"]{
     background-image: url(../img/bg/6.jpg);
 }
 
@@ -713,7 +723,7 @@ table {
 .energy_timer {
     position: relative;
     top: -4px;
-    left: 4px;
+    left: 7px;
     width: 49px;
     display: inline-block;
 }
