@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.24.0';
+    const gameVersion = 'v0.24.1';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -359,11 +359,8 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(function () {
 
 
-
-
-
                 let puzzleBackground = getRandomNumber(2, 7);
-                let storageKey = 'puzzleBg_'+puzzleBackground;
+                let storageKey = 'puzzleBg_' + puzzleBackground;
                 let score = parseInt($('.playerScoreCounter').text())
 
                 // + Запись пазлов в стор
@@ -371,11 +368,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(result => {
                         let storageValue = result?.keys[0].value;
 
-                        if (storageValue === "" ) {
+                        if (storageValue === "") {
                             storageValue = "0";
                         }
                         let newStorageValue = parseInt(storageValue) + score;
-                        console.log('puzzleBg_'+puzzleBackground, newStorageValue, score, parseInt(storageValue));
+                        console.log('puzzleBg_' + puzzleBackground, newStorageValue, score, parseInt(storageValue));
 
                         storageSetFN(storageKey, newStorageValue)
 
@@ -385,9 +382,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 $('body').append('<div class="btnMenuBox">' +
                     '<div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div>' +
-                    '<div class="levelRewardBox"><div class="levelReward" data-bg="'+puzzleBackground+'"><div class="levelRewardCount">'+ score +'</div></div></div>' +
+                    '<div class="levelRewardBox"><div class="levelReward" data-bg="' + puzzleBackground + '"><div class="levelRewardCount">' + score + '</div></div></div>' +
                     '<div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div>' +
-                    '<div class="btnMenu btnHome" data-level="' + gameLevel + '"></div>' +
+                    '<div class="btnMenu btnHome js-btnHome js-btnHomeBig" data-level="' + gameLevel + '"></div>' +
                     '</div></div>');
 
                 $('body').find('.btnRestart').on('click', function () {
@@ -397,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     musicPlay('./music/level_new.mp3');
                 });
 
-                $('body').find('.btnHome').on('click', function () {
+                $('body').find('.js-btnHomeBig').on('click', function () {
                     let completeLvl = $(this).data('level');
 
                     $('.js-menuLevel').eq(completeLvl - 1).addClass('menuLevel_complete');
@@ -406,10 +403,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     removeLevel();
                     $('.js-menuMainLevelBox').show();
                     $('.js-btnHomeSmall').hide();
+                    $('.js-btnGallery').show();
                     musicPlay('./music/level_new.mp3');
                     $('.js-mainBox').addClass('is--menuLevel-open');
                 });
-
 
                 let stLegend = starLegend[parseInt(gameLevel) - 1];
                 let sScore = parseInt($('.playerScoreCounter').text());
@@ -670,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('.js-gameBox').show();
                 $('.menuLevelBox').hide();
                 start(dataSizeX, dataSizeY, gameLevel);
-                $('.js-btnHomeSmall').show();
+                $('.js-btnGallery').hide();
                 musicPlay('./music/level_new.mp3');
                 $('.js-mainBox').removeClass('is--menuLevel-open');
             } else {
@@ -793,17 +790,31 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    $('.js-btnHomeSmall').on('click', function () {
+
+        console.log(555);
+
+        $('.js-menuMainLevelBox').show();
+        $('.js-btnHomeSmall').hide();
+        $('.js-btnGallery').show();
+        $('.js-galleryBox').hide();
+    });
+
     $('.js-btnGallery').on('click', function () {
+        $('.js-btnGallery').hide();
+        $('.js-btnHomeSmall').show();
+        $('.menuLevelBox').hide();
+        $('.js-galleryBox').show();
 
         FN_check_gallery();
     });
-
-    FN_check_gallery(); //удалить
 
     function FN_check_gallery() {
         let item = $('.js-galleryItem[data-star]');
         let stars = $('.menuStar').length + g_friend_stars;
         stars = 7; // + должно браться и стора (то что поделились друзья)
+
+        $('.galleryNeed').remove();
 
         for (i = 0; i < item.length; i++) {
             let needStar = parseInt(item.eq(i).attr('data-star'));
@@ -864,7 +875,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     energyVal = 5;
                 }
-                if(bonusEnergy !== undefined){
+                if (bonusEnergy !== undefined) {
                     energyVal += bonusEnergy
                 }
                 setCurrentEnergy(energyVal);
@@ -908,7 +919,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Проверка готовности рекламы
-    bridge.send('VKWebAppCheckNativeAds', { ad_format: 'reward' })
+    bridge.send('VKWebAppCheckNativeAds', {ad_format: 'reward'})
         .then((data) => {
             if (data.result) {
                 // Предзагруженная реклама есть.
@@ -921,17 +932,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Рекламные материалы не найдены.');
                 // Запрос на загрузку рекламных материалов может быть не выполнен. Обычно это происходит из-за низкой скорости интернет-соединения или кратковременных сбоев в работе сети.
             }
-                // Чтобы обойти эту проблему, ваша игра может вызывать VKWebAppCheckNativeAds периодически, по таймеру, во время своей работы, чтобы гарантированно получить материалы ко времени показа.
+            // Чтобы обойти эту проблему, ваша игра может вызывать VKWebAppCheckNativeAds периодически, по таймеру, во время своей работы, чтобы гарантированно получить материалы ко времени показа.
         })
-        .catch((error) => { console.log(error); /* Ошибка */  });
+        .catch((error) => {
+            console.log(error); /* Ошибка */
+        });
 
     // Обработчик нажатия кнопки "Посмотрите рекламу, чтобы прокачать героя"
-    function fooButtonClick()
-    {
+    function fooButtonClick() {
         // Показать рекламу
-        bridge.send('VKWebAppShowNativeAds', { ad_format: 'reward' })
+        bridge.send('VKWebAppShowNativeAds', {ad_format: 'reward'})
             .then((data) => {
-                if (data.result){
+                if (data.result) {
                     console.log('Реклама показана');
                     energyCalculator(1);
                     storageSetFN('HCF_energy', currentEnergyFN());
@@ -941,10 +953,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 else // Ошибка
                     console.log('Ошибка при показе');
             })
-            .catch((error) => { console.log(error); /* Ошибка */ });
+            .catch((error) => {
+                console.log(error); /* Ошибка */
+            });
     }
 
-    $('.js-energy_add').on('click', function(){
+    $('.js-energy_add').on('click', function () {
         fooButtonClick();
     })
 });

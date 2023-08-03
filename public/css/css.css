@@ -300,7 +300,7 @@ table {
 
 .playerScore,
 .bonusScore,
-.energy_timer{
+.energy_timer {
     margin: auto;
     text-shadow: 1px 0 5px #fff, 0 0 21px #fff;
     border-radius: 5px;
@@ -554,6 +554,7 @@ table {
     height: 400px;
     overflow-y: auto;
     overflow-x: hidden;
+    display: none;
 }
 
 .galleryItem {
@@ -564,16 +565,13 @@ table {
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 5px;
-
     display: inline-block;
     margin: 12px 10px;
-
     text-align: center;
-
 }
 
 
-.galleryItem__cont{
+.galleryItem__cont {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -588,7 +586,7 @@ table {
     content: "";
     position: absolute;
     z-index: 10;
-    top:0;
+    top: 0;
     bottom: 0;
     left: -52px;
     background: url(../img/gallery/lock.png) center no-repeat;
@@ -597,11 +595,11 @@ table {
     background-size: 60px;
 }
 
-.galleryItem_open.galleryItem:before{
+.galleryItem_open.galleryItem:before {
     background: none;
 }
 
-.galleryItem_active.galleryItem:before{
+.galleryItem_active.galleryItem:before {
     background: url(../img/gallery/verified.png) center no-repeat;
     background-size: 100px;
     filter: grayscale(0);
@@ -613,7 +611,7 @@ table {
 }
 
 
-.galleryNeed{
+.galleryNeed {
     text-shadow: 1px 0 5px #fff, 0 0 21px #fff;
     color: #000;
     font-size: 18px;
@@ -657,20 +655,23 @@ table {
     background-image: url(../img/bg/1.jpg);
 }
 
-[data-bg="3"]{
+[data-bg="3"] {
     background-image: url(../img/bg/2.jpg);
 }
 
-[data-bg="4"]{
+[data-bg="4"] {
     background-image: url(../img/bg/3.jpg);
 }
-[data-bg="5"]{
+
+[data-bg="5"] {
     background-image: url(../img/bg/4.jpg);
 }
-[data-bg="6"]{
+
+[data-bg="6"] {
     background-image: url(../img/bg/5.jpg);
 }
-[data-bg="7"]{
+
+[data-bg="7"] {
     background-image: url(../img/bg/6.jpg);
 }
 
@@ -678,22 +679,22 @@ table {
 /* BG */
 
 /* + energy_box */
-.energy_box{
+.energy_box {
     display: none;
 }
 
-.energy_content{
+.energy_content {
     width: 150px;
     position: relative;
     left: 50%;
     margin-left: -50px;
 }
 
-.energy_counter{
+.energy_counter {
     display: inline-block;
 }
 
-.energy_sep{
+.energy_sep {
     margin: 0 -8px;
 }
 
@@ -709,7 +710,7 @@ table {
     text-shadow: 2px 2px 2px black;
 }
 
-.energy_timer{
+.energy_timer {
     position: relative;
     top: -4px;
     left: 4px;
@@ -717,7 +718,7 @@ table {
     display: inline-block;
 }
 
-.energyTimer_fill{
+.energyTimer_fill {
     color: #000;
     font-size: 18px;
     font-weight: bold;
@@ -725,7 +726,7 @@ table {
     line-height: 20px;
 }
 
-.is--menuLevel-open .energy_box{
+.is--menuLevel-open .energy_box {
     display: block;
 }
 
@@ -738,6 +739,7 @@ table {
     margin-left: 6px;
     cursor: pointer;
 }
+
 /* - energy_box */
 
 .game_background {
@@ -762,23 +764,25 @@ table {
 }
 
 /* + levelReward */
-.levelRewardBox{
+.levelRewardBox {
     position: absolute;
-    top:50%;
+    top: 50%;
     margin-top: -64px;
     left: 0;
     width: 100%;
     z-index: 2;
     /*display: none;*/
 }
-.levelReward{
+
+.levelReward {
     position: relative;
     width: 128px;
     height: 128px;
     margin: auto;
 
 }
-.levelReward:before{
+
+.levelReward:before {
     content: '';
     z-index: 2;
     position: absolute;
@@ -789,6 +793,7 @@ table {
     background: url(../img/level/puzzle.png) center no-repeat;
     background-size: contain;
 }
+
 .levelRewardCount {
     font-size: 32px;
     font-weight: bold;
@@ -811,4 +816,5 @@ table {
     left: -6px;
     top: -2px;
 }
+
 /* - levelReward */
