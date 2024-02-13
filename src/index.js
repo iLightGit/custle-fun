@@ -8,13 +8,13 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.24.3';
+    const gameVersion = 'v0.24.4';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
     const HCF_HREF = 'https://vk.com/app8158397';
 
-    // Макасимальная энергия и длительность восстановления
+    // Максимальная энергия и длительность восстановления
     const ENERGY_MAX = 5;
     const ENERGY_DURATION = 20;
 
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         e.preventDefault();
         let el = $(this);
-        parent = el.closest('.m_content');
+        let parent = el.closest('.m_content');
 
         if (!(parent.hasClass('locked')) && !(el.hasClass('clear')) && !el.hasClass('active')) {
             el.addClass('active');
@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 // Вынести в событие ???
-                // Ипользуется только для мобилок
+                // Теперь используется везде
                 // Выводим, если больше 7 очков (не для 1 уровня)
                 if (sScore > 7) {
                     bridge.send("VKWebAppShowLeaderBoardBox", {user_result: sScore})
@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     //На мобилке вызовет дополнительное окно
                                     vkAjaxFN('secure.setUserLevel?&level=' + gameResult + '&user_id=');
 
-                                    //Алект имеет смысл, если не на мобилке
+                                    //Алерт имеет смысл, если не на мобилке
                                     //alert('Ура, новый личный рекорд! ' + gameResult);
                                 } else {
                                     $('.bonusScoreFill').html('Лучший результат: ' + gameMaxPoints);
@@ -632,15 +632,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function currentEnergyFN() {
-        // Отнимает от текущего времени имеющиеся/накопленные секунды содержащиеся в попытках
-        let curEnergy = currentTime() - parseInt($('.js-energy_count').text()) * ENERGY_DURATION * 60;
-        let split = $('.js-energyTimer').text().split(':');
-        let minutes = parseInt(split[0]);
-        let seconds = parseInt(split[1]);
-        let timerEnergy = minutes * 60 + seconds;
-        let timerSaveEnergy = ENERGY_DURATION * 60 - timerEnergy;
 
-        return curEnergy - timerSaveEnergy;
+        let currentEnergy = parseInt($('.js-energy_count').text());
+
+        // Энергия попыток в секундах
+        let attemptsSeconds = currentEnergy * ENERGY_DURATION * 60;
+        let timerWork = 0;
+        let timerIs;
+
+        // Когда энергия не полная нужно учитывать время работы таймера
+        // Энергия отнимается перед запуском таймера, поэтому "-1"
+        if (currentEnergy < ENERGY_MAX - 1) {
+            let timerSplit = $('.js-energyTimer').text().split(':');
+            let timerMinutes = parseInt(timerSplit[0]);
+            let timerSeconds = parseInt(timerSplit[1]);
+
+            // Сколько секунд осталось на таймере
+            timerIs = timerMinutes * 60 + timerSeconds;
+
+            // Но нам надо время, которое таймер отработал
+            timerWork = ENERGY_DURATION * 60 - timerIs;
+        }
+
+        return currentTime() - attemptsSeconds - timerWork;
     }
 
     $('.js-menuLevel').on('click', function () {
@@ -651,13 +665,14 @@ document.addEventListener('DOMContentLoaded', function () {
             let currentEnergy = parseInt($('.js-energy_count').text())
             if (currentEnergy > 0) {
                 $('.js-energy_count').text(currentEnergy - 1);
-                storageSetFN('HCF_energy', currentEnergyFN());
+
                 // Запускаем таймер, только если он еще не запущен
                 if (gTimer === 0) {
                     let display = document.querySelector('#time');
                     startTimer(ENERGY_DURATION * 60, display);
                 }
 
+                storageSetFN('HCF_energy', currentEnergyFN());
 
                 dataSizeX = $(this).data('size-x');
                 dataSizeY = $(this).data('size-y');
@@ -819,7 +834,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 0; i < item.length; i++) {
             let needStar = parseInt(item.eq(i).attr('data-points'));
 
-            let puzzleBackground = i+1;
+            let puzzleBackground = i + 1;
             let storageKey = 'puzzleBg_' + puzzleBackground;
 
             // +  пазлов в стор
@@ -903,10 +918,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let gTimer = 0;
 
     function startTimer(duration, display) {
+
         $('.energy_timer').show();
         clearInterval(gTimer);
-        let timer = duration, minutes, seconds;
-        let currentEnergy = parseInt($('.js-energy_count').text());
+
+        let timer = duration;
+        let minutes;
+        let seconds;
+        let currentEnergy;
+
         gTimer = setInterval(function () {
 
             minutes = parseInt(timer / 60, 10);
@@ -919,11 +939,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (--timer < 0) {
 
-                timer = duration;
+                // Перезагружаем таймер, но отнимаем 1с
+                timer = ENERGY_DURATION * 60 - 1;
                 currentEnergy = parseInt($('.js-energy_count').text());
-                currentEnergy++;
 
-                $('.js-energy_count').text(currentEnergy);
+                $('.js-energy_count').text(++currentEnergy);
 
                 if (currentEnergy >= 5) {
                     $('.energy_timer').hide();
