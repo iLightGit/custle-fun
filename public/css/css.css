@@ -726,6 +726,7 @@ table {
     left: 7px;
     width: 49px;
     display: inline-block;
+    margin-bottom: -10px; /* Чтобы не прыгал основной контент при появлении таймера */
 }
 
 .energyTimer_fill {

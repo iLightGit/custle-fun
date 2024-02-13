@@ -946,13 +946,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('.js-energy_count').text(++currentEnergy);
 
                 if (currentEnergy >= 5) {
-                    $('.energy_timer').hide();
-                    clearInterval(gTimer);
-                    gTimer = 0;
+                    removeTimer();
                 }
             }
         }, 1000);
     }
+
+    let removeTimer = () => {
+        $('.energy_timer').hide();
+        clearInterval(gTimer);
+        gTimer = 0;
+    }
+
+    // Проверка видимости документа
+    document.addEventListener('visibilitychange', function (event) {
+        // not visible
+        if (document.hidden) {
+            removeTimer();
+        } else {
+            energyCalculator();
+        }
+    });
+
 
     // Проверка готовности рекламы
     bridge.send('VKWebAppCheckNativeAds', {ad_format: 'reward'})
