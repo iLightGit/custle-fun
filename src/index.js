@@ -8,7 +8,7 @@ bridge.send("VKWebAppInit");
 document.addEventListener('DOMContentLoaded', function () {
 
 
-    const gameVersion = 'v0.24.4';
+    const gameVersion = 'v0.24.5';
 
     const imgDir = './img/pet/';
     const imgExt = '.png';
@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     const jsMusic = document.getElementById("js-main_music");
+    let scoreEL;
+    let scoreVAL = 0;
+    let payerScoreEL;
+    let payerScoreVAL = 0;
 
     function playAudio() {
         jsMusic.play();
@@ -288,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
-    let firstEL, lastEL;
+
 
 
     $('.m_content ').on('click', '.li', function (e) {
@@ -302,19 +306,19 @@ document.addEventListener('DOMContentLoaded', function () {
             musicPlay('./music/open_card.mp3');
 
             if (boxLi.find('.active').length === 2) {
-
+                let firstEL, lastEL;
                 parent.addClass('locked');
                 firstEL = $('.li.active:first');
                 lastEL = $('.li.active:last');
                 firstEL.addClass('first');
                 lastEL.addClass('last');
 
+                // setTimeout нужен, чтобы клетки НЕ закрывались моментально после открытия второй клетки
                 setTimeout(function () {
                     checkSame(firstEL, lastEL);
 
-                    let bonusPoints = parseInt($('.bonusScoreCounter').text());
-                    if (bonusPoints) {
-                        $('.bonusScoreCounter').html(bonusPoints - 1);
+                    if (scoreVAL) {
+                        scoreEL.html(--scoreVAL);
                     }
                     parent.removeClass('locked');
 
@@ -330,22 +334,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function checkSame(firstEL, lastEL) {
+
+        firstEL.add(lastEL).removeClass('active first last');
         if (firstEL.text() === lastEL.text()) {
-            $('.li.first, .li.last').addClass('clear').animate({
+            firstEL.add(lastEL).addClass('clear').animate({
                 fontSize: "0em"
             }, 500);
-            if (parseInt($('.bonusScoreCounter').text()) > 0) {
+            console.log(scoreVAL);
+            if (scoreVAL) {
                 getScore();
             }
-
+console.log(scoreVAL);
             musicPlay('./music/open_success.mp3');
+            checkComplete();
         } else {
             musicPlay('./music/open_wrong.mp3');
         }
-        setTimeout(function () {
-            $('.li.first, .li.last').removeClass('active first last');
-        }, 600);
-        checkComplete();
+
     }
 
     function getRandomNumber(min, max) { // min and max included
@@ -358,10 +363,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             setTimeout(function () {
 
-
                 let puzzleBackground = getRandomNumber(1, 6);
                 let storageKey = 'puzzleBg_' + puzzleBackground;
-                let score = parseInt($('.playerScoreCounter').text())
 
                 // + Запись пазлов в стор
                 bridge.send("VKWebAppStorageGet", {"keys": [storageKey]})
@@ -371,8 +374,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (storageValue === "") {
                             storageValue = "0";
                         }
-                        let newStorageValue = parseInt(storageValue) + score;
-                        console.log('puzzleBg_' + puzzleBackground, newStorageValue, score, parseInt(storageValue));
+                        let newStorageValue = parseInt(storageValue) + payerScoreVAL;
+                        console.log('puzzleBg_' + puzzleBackground, newStorageValue, payerScoreVAL, parseInt(storageValue));
 
                         storageSetFN(storageKey, newStorageValue)
 
@@ -382,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 $('body').append('<div class="btnMenuBox">' +
                     '<div class="menuStarBox mod--levelSB js-menuOneLevelBox"><i class="menuStar"></i><i class="menuStar"></i><i class="menuStar"></i></div>' +
-                    '<div class="levelRewardBox"><div class="levelReward" data-bg="' + puzzleBackground + '"><div class="levelRewardCount">' + score + '</div></div></div>' +
+                    '<div class="levelRewardBox"><div class="levelReward" data-bg="' + puzzleBackground + '"><div class="levelRewardCount">' + payerScoreVAL + '</div></div></div>' +
                     '<div class="btnMenuContent"><div class="btnMenu btnRestart" data-size-x="' + dataSizeX + '" data-size-y="' + dataSizeY + '"></div>' +
                     '<div class="btnMenu btnHome js-btnHome js-btnHomeBig" data-level="' + gameLevel + '"></div>' +
                     '</div></div>');
@@ -409,14 +412,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 let stLegend = starLegend[parseInt(gameLevel) - 1];
-                let sScore = parseInt($('.playerScoreCounter').text());
                 let sCount = 1; // По дефолту всегда 1 звезда
 
 
-                if (sScore >= stLegend[0]) { // 3 звезды
+                if (payerScoreVAL >= stLegend[0]) { // 3 звезды
                     sCount = 3;
                     musicPlay('./music/level_end_3.mp3');
-                } else if (sScore >= stLegend[1]) { // 2 звезды
+                } else if (payerScoreVAL >= stLegend[1]) { // 2 звезды
                     sCount = 2;
                     musicPlay('./music/level_end_2.mp3');
                 } else {
@@ -437,8 +439,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Вынести в событие ???
                 // Теперь используется везде
                 // Выводим, если больше 7 очков (не для 1 уровня)
-                if (sScore > 7) {
-                    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: sScore})
+                if (payerScoreVAL > 7) {
+                    bridge.send("VKWebAppShowLeaderBoardBox", {user_result: payerScoreVAL})
                         .then(data => console.log(data.success))
                         .catch(error => console.log(error));
                 }
@@ -459,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // - Запись звезд в StorageVK
 
 
-                    let gameResult = parseInt($('.playerScoreCounter').text());
+                    let gameResult = payerScoreVAL;
 
                     // используем уровни для очков, т.к. очки нифига не работают
                     vkAjaxFN('secure.getUserLevel?user_ids=')
@@ -572,31 +574,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function getScore() {
-        let iScore = $('.playerScoreCounter');
-        let newVal = parseInt($('.bonusScoreCounter').text());
 
-        let oldVal = parseInt(iScore.text());
+        let newVal = scoreVAL;
+        let oldVal = payerScoreVAL;
         let newScore = $('.NewPlayerScore');
+
         newScore.text(newVal).show();
         newScore.css({'top': '-290px', 'right': '-100px', 'font-size': '50px'});
         newScore.animate({
             right: "+=115", top: "+=290", fontSize: "20px"
         }, 1000);
 
-        if (parseInt($('.bonusScoreCounter').text()) > 0) {
+        if (scoreVAL) {
+            payerScoreVAL = newVal + oldVal;
             setTimeout(function () {
                 newScore.hide();
-                iScore.text(newVal + oldVal);
+                console.log(newVal + oldVal);
+
+                payerScoreEL.text(payerScoreVAL);
             }, 1000);
         }
 
     }
 
     function addBonusPoints() {
+        scoreVAL = $('.m_content li').length;
+
         $('.btnSmallContent').after('<div class="bonusScoreBox">' +
-            '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + $('.m_content li').length + '</div></span></div>' +
+            '<div class="bonusScore"><div class="bonusScoreFill">Ходы: <span class="bonusScoreCounter">' + scoreVAL + '</div></span></div>' +
             '<div class="playerScore"><div class="playerScoreFill">Очки: <span class="playerScoreCounter">0</span><span class="NewPlayerScore">0</span></div></div>' +
             '</div>');
+
+        scoreEL = $('.bonusScoreCounter');
+        payerScoreEL = $('.playerScoreCounter');
     }
 
     $('.m_content').append('<div class="gameVersion" style="position: absolute;left: 10px;bottom: 2px">' + gameVersion + '</div>');
@@ -623,6 +633,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('.bonusScoreBox').remove();
         $('.btnMenuBox').remove();
         $('.playerScoreCounter').text(0);
+        payerScoreVAL = 0;
     }
 
     function musicPlay(musicFile) {
