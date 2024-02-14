@@ -293,8 +293,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
-
     $('.m_content ').on('click', '.li', function (e) {
 
         e.preventDefault();
@@ -340,11 +338,11 @@ document.addEventListener('DOMContentLoaded', function () {
             firstEL.add(lastEL).addClass('clear').animate({
                 fontSize: "0em"
             }, 500);
-            console.log(scoreVAL);
+
             if (scoreVAL) {
                 getScore();
             }
-console.log(scoreVAL);
+
             musicPlay('./music/open_success.mp3');
             checkComplete();
         } else {
@@ -470,9 +468,6 @@ console.log(scoreVAL);
 
                             let gameMaxPoints = result?.response[0]?.level;
 
-                            console.log('здесь будем записывать рекорд222', result);
-                            console.log('здесь будем записывать рекорд123', gameMaxPoints);
-                            console.log('оно работает???', gameResult);
                             if (gameResult > 100) {
                                 if (gameResult > gameMaxPoints) {
                                     //На мобилке вызовет дополнительное окно
@@ -589,8 +584,6 @@ console.log(scoreVAL);
             payerScoreVAL = newVal + oldVal;
             setTimeout(function () {
                 newScore.hide();
-                console.log(newVal + oldVal);
-
                 payerScoreEL.text(payerScoreVAL);
             }, 1000);
         }
@@ -817,9 +810,6 @@ console.log(scoreVAL);
     });
 
     $('.js-btnHomeSmall').on('click', function () {
-
-        console.log(555);
-
         $('.js-menuMainLevelBox').show();
         $('.js-btnHomeSmall').hide();
         $('.js-btnGallery').show();
